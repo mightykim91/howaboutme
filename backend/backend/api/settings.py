@@ -171,12 +171,12 @@ STATIC_URL = '/static/'
 REST_FRAMEWORK = {
     'DEFAULT_AUTHENTICATION_CLASSES': [
         'rest_framework_jwt.authentication.JSONWebTokenAuthentication',
+        'rest_framework.authentication.TokenAuthentication',
     ]
 }
 
 ACCOUNT_EMAIL_VERIFICATION = 'none'
 
-REST_USE_JWT = True
 
 JWT_AUTH = {
     'JWT_SECRET_KEY': SECRET_KEY,
@@ -188,3 +188,5 @@ JWT_AUTH = {
 
 # USE CUSTOM USER
 AUTH_USER_MODEL = 'accounts.User'
+
+REST_USE_JWT = True
