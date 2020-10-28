@@ -11,7 +11,7 @@ class User(AbstractUser):
 class Profile(models.Model):
     user = models.OneToOneField(User, on_delete=models.CASCADE)
     nickname = models.CharField(max_length=10)
-    gender = models.IntegerField(max_length=1)
+    gender = models.IntegerField()
     birth = models.DateField()
     height = models.FloatField()
     body = models.CharField(max_length=50)
