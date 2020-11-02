@@ -1,6 +1,6 @@
 import requests, json, os
 
-from django.shortcuts import render, redirect
+from django.shortcuts import render, redirect, get_object_or_404
 from django.http import HttpResponse, JsonResponse
 
 from rest_framework.response import Response
@@ -11,6 +11,7 @@ from .serializers import UserSerializer, ProfileSerializer
 from .models import User, Profile
 
 
+URL = 'http://127.0.0.1:8000/'
 @api_view(['POST'])
 @permission_classes([IsAuthenticated])
 def set_profile(request):
@@ -38,7 +39,7 @@ def kakaoLogin(request):
         with open('./secrets.json') as json_file:
             json_data = json.load(json_file)
             REST_API_KEY = json_data['KAKAO_API_KEY']
-        REDIRECT_URI = 'http://127.0.0.1:8000/accounts/login/kakao/callback/'
+        REDIRECT_URI = f'{URL}accounts/login/kakao/callback/'
         request_url = 'https://kauth.kakao.com/oauth/authorize?response_type=code&client_id={}&redirect_uri={}'.format(REST_API_KEY, REDIRECT_URI)
     
         return redirect(request_url)
@@ -65,7 +66,7 @@ def kakaoCallBack(request):
     body = {
         'grant_type':'authorization_code',
         'client_id': f'{REST_API_KEY}',
-        'redirect_uri': 'http://127.0.0.1:8000/accounts/login/kakao/callback/',
+        'redirect_uri': f'{URL}accounts/login/kakao/callback/',
         'code': f'{code}',
     }
     token_response = requests.post(request_url, headers=headers, data=body)
@@ -77,10 +78,30 @@ def kakaoCallBack(request):
     }
     
     info_url = 'https://kapi.kakao.com/v2/user/me'
-    user_info = requests.get(info_url, headers = headers)
-    response = JsonResponse(user_info.json())
-    access_token = token_response.json()['access_token']
-    request.session['kakao_access_token'] = access_token
+    user_info = requests.get(info_url, headers = headers).json()
+    try:
+        login_url = f'{URL}login/'
+        user = get_object_or_404(User, username=user_info['kakao_account']['profile']['nickname']+'kakao')
+        body = {
+            'username':user_info['kakao_account']['profile']['nickname']+'kakao',
+            'password':user_info['kakao_account']['email']
+        }
+        token = requests.post(login_url, data=body)
+        response = JsonResponse(token.json())
+    except:
+        print('no')
+        signup_url = f'{URL}signup/'
+        body = {
+            'username':user_info['kakao_account']['profile']['nickname']+'kakao',
+            'email':user_info['kakao_account']['email'],
+            'password1':user_info['kakao_account']['email'],
+            'password2':user_info['kakao_account']['email']
+        }
+        token = requests.post(signup_url, data=body)
+        user = get_object_or_404(User, username=user_info['kakao_account']['profile']['nickname']+'kakao')
+        user.name = user_info['kakao_account']['profile']['nickname']
+        user.save()
+        response = JsonResponse(token.json())
     return response
 
 
