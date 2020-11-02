@@ -3,6 +3,7 @@ from django.contrib.auth.models import AbstractUser
 
 
 class User(AbstractUser):
+    name = models.CharField(max_length=10)
     profile_saved = models.IntegerField(default=0)
     image_saved = models.IntegerField(default=0)
     similarity = models.IntegerField(default=0)
