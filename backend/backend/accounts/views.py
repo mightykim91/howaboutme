@@ -34,7 +34,7 @@ def dup_check(request):
 
 #initial kakao login
 def kakaoLogin(request):
-    if not 'access_token' in request.session:
+    if not 'kakao_access_token' in request.session:
         with open('./secrets.json') as json_file:
             json_data = json.load(json_file)
             REST_API_KEY = json_data['KAKAO_API_KEY']
@@ -80,12 +80,12 @@ def kakaoCallBack(request):
     user_info = requests.get(info_url, headers = headers)
     response = JsonResponse(user_info.json())
     access_token = token_response.json()['access_token']
-    request.session['access_token'] = access_token
+    request.session['kakao_access_token'] = access_token
     return response
 
 
 def kakaoLoginCheck(session):
-    if 'access_token' in session:
+    if 'kakao_access_token' in session:
         return True
     else:
         return False
@@ -93,14 +93,15 @@ def kakaoLoginCheck(session):
 
 def kakaoLogOut(request):
     headers = request.headers
-    if not 'access_token' in request.session:
+    # if not 'access_token' in request.session:
+    if not kakaoLoginCheck(request.session):
         msg = {
             'status': 'false',
             "error": '로그인 되어 있지 않은 유저입니다.'
         }
         return JsonResponse(msg, status=401)
     
-    token = request.session['access_token']
+    token = request.session['kakao_access_token']
     logout_url = 'https://kapi.kakao.com/v1/user/logout'
     headers = {
         'Content-type': 'application/x-www-form-urlencoded; charset=utf-8',
@@ -108,7 +109,7 @@ def kakaoLogOut(request):
     }
     response = requests.get(logout_url, headers=headers)
     try:
-        del request.session['access_token']
+        del request.session['kakao_access_token']
         request.session.flush()
         
     except KeyError:
