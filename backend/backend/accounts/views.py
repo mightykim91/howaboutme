@@ -144,8 +144,10 @@ def kakaoLogOut(request):
     return JsonResponse(msg, status=200)
     
 def googleLogin(request):
-    # request_url = "https://accounts.google.com/o/oauth2/v2/auth?client_id=785785164353-e5hgs9ksc1tf8o5b778lrs6qq6b07nql.apps.googleusercontent.com&redirect_uri=http://127.0.0.1/accounts/google/callback&response_type=code&scope=email%20profile%20openid&access_type=offline"
-    REST_API_KEY = '785785164353-e5hgs9ksc1tf8o5b778lrs6qq6b07nql.apps.googleusercontent.com'
+    with open('./secrets.json') as json_file:
+        json_data = json.load(json_file)
+        REST_API_KEY = json_data['GOOGLE_CLIENT_ID']
+
     REDIRECT_URI = f'{URL}accounts/login/google/callback/'
     request_url = "https://accounts.google.com/o/oauth2/v2/auth?client_id={}&redirect_uri={}&response_type=code&scope=email%20profile%20openid".format(REST_API_KEY, REDIRECT_URI)
     
@@ -153,16 +155,21 @@ def googleLogin(request):
     
 def googleCallBack(request):
     code = request.GET.get('code', None)
-    # request_url = 'https://oauth2.googleapis.com/token'
+
+    with open('./secrets.json') as json_file:
+        json_data = json.load(json_file)
+        REST_API_KEY = json_data['GOOGLE_CLIENT_ID']
+        SECRET_KEY = json_data['GOOGLE_SECRET_KEY']
+
     request_url = 'https://www.googleapis.com/oauth2/v4/token'
     headers = {
         'Content-type': 'application/x-www-form-urlencoded'
     }
     body = {
         'code':code,
-        'client_id':'785785164353-e5hgs9ksc1tf8o5b778lrs6qq6b07nql.apps.googleusercontent.com',
-        'client_secret':'vFgBpoRn-r_3Edf5-OkqrFiI',
-        'redirect_uri':'http://127.0.0.1:8000/accounts/login/google/callback/',
+        'client_id':REST_API_KEY,
+        'client_secret':SECRET_KEY,
+        'redirect_uri':f'{URL}accounts/login/google/callback/',
         'grant_type':'authorization_code'
     }
     token_response = requests.post(request_url,headers=headers,data=body)
