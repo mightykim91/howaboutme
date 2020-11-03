@@ -93,7 +93,6 @@ def kakaoCallBack(request):
         signup_url = f'{URL}signup/'
         body = {
             'username':user_info['kakao_account']['profile']['nickname']+'kakao',
-            'email':user_info['kakao_account']['email'],
             'password1':user_info['kakao_account']['email'],
             'password2':user_info['kakao_account']['email']
         }
@@ -195,12 +194,75 @@ def googleCallBack(request):
         signup_url = f'{URL}signup/'
         body = {
             'username':user_info['name']+'google',
-            'email':user_info['email'],
             'password1':user_info['email'],
             'password2':user_info['email']
         }
         token = requests.post(signup_url, data=body)
         user = get_object_or_404(User, username=user_info['name']+'google')
+        user.name = user_info['name']
+        user.save()
+        response = JsonResponse(token.json())
+    return response
+
+def naverLogin(request):
+    with open('./secrets.json') as json_file:
+        json_data = json.load(json_file)
+        REST_API_KEY = json_data['NAVER_CLIENT_ID']
+
+    REDIRECT_URI = f'{URL}accounts/login/naver/callback/'
+    request_url = "https://nid.naver.com/oauth2.0/authorize?client_id={}&redirect_uri={}&response_type=code".format(REST_API_KEY, REDIRECT_URI)
+    
+    return redirect(request_url)
+
+def naverCallBack(request):
+    
+    with open('./secrets.json') as json_file:
+        json_data = json.load(json_file)
+        REST_API_KEY = json_data['NAVER_CLIENT_ID']
+        SECRET_KEY = json_data['NAVER_SECRET_KEY']
+
+    code = request.GET.get('code', None)
+    request_url = 'https://nid.naver.com/oauth2.0/token'
+    headers = {
+        'Content-type': 'application/x-www-form-urlencoded; charset=utf-8'
+    }
+    body = {
+        'grant_type':'authorization_code',
+        'client_id': REST_API_KEY,
+        'client_secret': SECRET_KEY,
+        'code':code,
+    }
+    token_response = requests.get(request_url, headers=headers, params=body)
+    ##유저정보
+    headers = {
+        'Content-type': 'application/x-www-form-urlencoded; charset=utf-8',
+        'Authorization': 'Bearer {}'.format(token_response.json()['access_token'])
+    }
+    
+    info_url = 'https://openapi.naver.com/v1/nid/me'
+    user_info = requests.get(info_url, headers = headers).json()['response']
+    # return JsonResponse(user_info)
+    try:
+        login_url = f'{URL}login/'
+        user = get_object_or_404(User, username=user_info['name']+'naver')
+        body = {
+            'username':user_info['name']+'naver',
+            'password':user_info['email']
+        }
+        token = requests.post(login_url, data=body)
+        response = JsonResponse(token.json())
+    except:
+        print('no')
+        signup_url = f'{URL}signup/'
+        print(user_info)
+        body = {
+            'username':user_info['name']+'naver',
+            'password1':user_info['email'],
+            'password2':user_info['email'],
+        }
+        print(body)
+        token = requests.post(signup_url, data=body)
+        user = get_object_or_404(User, username=user_info['name']+'naver')
         user.name = user_info['name']
         user.save()
         response = JsonResponse(token.json())
