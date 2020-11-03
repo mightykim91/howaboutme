@@ -2,7 +2,7 @@ import requests, json, os
 
 from django.shortcuts import render, redirect, get_object_or_404
 from django.http import HttpResponse, JsonResponse
-
+from django.views.generic.base import View
 from rest_framework.response import Response
 from rest_framework.decorators import api_view, permission_classes
 from rest_framework.permissions import IsAuthenticated
@@ -143,9 +143,58 @@ def kakaoLogOut(request):
     
     return JsonResponse(msg, status=200)
     
+def googleLogin(request):
+    # request_url = "https://accounts.google.com/o/oauth2/v2/auth?client_id=785785164353-e5hgs9ksc1tf8o5b778lrs6qq6b07nql.apps.googleusercontent.com&redirect_uri=http://127.0.0.1/accounts/google/callback&response_type=code&scope=email%20profile%20openid&access_type=offline"
+    REST_API_KEY = '785785164353-e5hgs9ksc1tf8o5b778lrs6qq6b07nql.apps.googleusercontent.com'
+    REDIRECT_URI = f'{URL}accounts/login/google/callback/'
+    request_url = "https://accounts.google.com/o/oauth2/v2/auth?client_id={}&redirect_uri={}&response_type=code&scope=email%20profile%20openid".format(REST_API_KEY, REDIRECT_URI)
     
+    return redirect(request_url)
     
+def googleCallBack(request):
+    code = request.GET.get('code', None)
+    # request_url = 'https://oauth2.googleapis.com/token'
+    request_url = 'https://www.googleapis.com/oauth2/v4/token'
+    headers = {
+        'Content-type': 'application/x-www-form-urlencoded'
+    }
+    body = {
+        'code':code,
+        'client_id':'785785164353-e5hgs9ksc1tf8o5b778lrs6qq6b07nql.apps.googleusercontent.com',
+        'client_secret':'vFgBpoRn-r_3Edf5-OkqrFiI',
+        'redirect_uri':'http://127.0.0.1:8000/accounts/login/google/callback/',
+        'grant_type':'authorization_code'
+    }
+    token_response = requests.post(request_url,headers=headers,data=body)
+
+    headers = {
+        'Content-type': 'application/x-www-form-urlencoded; charset=utf-8',
+        'Authorization': 'Bearer {}'.format(token_response.json()['access_token'])
+    }
     
-    
-    
-       
+    info_url = 'https://www.googleapis.com/oauth2/v1/userinfo?access_token={}'.format(token_response.json()['access_token'])
+    user_info = requests.get(info_url).json()
+    try:
+        login_url = f'{URL}login/'
+        user = get_object_or_404(User, username=user_info['name']+'google')
+        body = {
+            'username':user_info['name']+'google',
+            'password':user_info['email']
+        }
+        token = requests.post(login_url, data=body)
+        response = JsonResponse(token.json())
+    except:
+        print('no')
+        signup_url = f'{URL}signup/'
+        body = {
+            'username':user_info['name']+'google',
+            'email':user_info['email'],
+            'password1':user_info['email'],
+            'password2':user_info['email']
+        }
+        token = requests.post(signup_url, data=body)
+        user = get_object_or_404(User, username=user_info['name']+'google')
+        user.name = user_info['name']
+        user.save()
+        response = JsonResponse(token.json())
+    return response

@@ -60,6 +60,7 @@ INSTALLED_APPS = [
     'allauth.account',
     'allauth.socialaccount',
     'allauth.socialaccount.providers.kakao',
+    'allauth.socialaccount.providers.google',
     'rest_auth',
     'rest_auth.registration',
 
@@ -75,6 +76,15 @@ SOCIAL_ACCOUNT_PROVIDER = {
             'client_id': '',
             'secret': '',
             'key': '',
+        }
+    },
+    'google': {
+        'SCOPE': [
+            'profile',
+            'email',
+        ],
+        'AUTH_PARAMS': {
+            'access_type': 'online',
         }
     }
 }

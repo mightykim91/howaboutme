@@ -9,4 +9,6 @@ urlpatterns = [
     path('login/kakao/', views.kakaoLogin),
     path('login/kakao/callback/', views.kakaoCallBack),
     path('logout/kakao/', views.kakaoLogOut),
+    path('login/google/', views.googleLogin),
+    path('login/google/callback/', views.googleCallBack),
 ]
