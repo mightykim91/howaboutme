@@ -277,11 +277,25 @@ def naverCallBack(request):
 @api_view(['POST'])
 @permission_classes([IsAuthenticated])
 def imageUpload(request):
-    with open('./secrets.json') as json_file:
-        json_data = json.load(json_file)
-        firebaseConfig = json_data['FIREBASE_CONFIG']
-    firebase = pyrebase.initialize_app(firebaseConfig)
-    storage = firebase.storage()
-    print(request.user.profile.nickname)
-    image_file = request.FILES['image']
-    storage.child(request.user.profile.nickname).put(image_file)
+    try:
+        with open('./secrets.json') as json_file:
+            json_data = json.load(json_file)
+            firebaseConfig = json_data['FIREBASE_CONFIG']
+        firebase = pyrebase.initialize_app(firebaseConfig)
+        storage = firebase.storage()
+        print(request.user.profile.nickname)
+        image_file = request.FILES['image']
+        storage.child(request.user.profile.nickname).put(image_file)
+        msg = {
+            'status': 'true',
+            'message': '이미지가 성공적으로 저장되었습니다.'
+        }
+        
+        return JsonResponse(msg, status=200)
+    except:
+        msg = {
+            'status': 'false',
+            'message': '이미지 저장에 실패했습니다.'
+        }
+        
+        return JsonResponse(msg, status=500)
