@@ -2,7 +2,7 @@ import requests, json, os
 
 from django.shortcuts import render, redirect, get_object_or_404
 from django.http import HttpResponse, JsonResponse
-
+from django.views.generic.base import View
 from rest_framework.response import Response
 from rest_framework.decorators import api_view, permission_classes
 from rest_framework.permissions import IsAuthenticated
@@ -143,9 +143,65 @@ def kakaoLogOut(request):
     
     return JsonResponse(msg, status=200)
     
+def googleLogin(request):
+    with open('./secrets.json') as json_file:
+        json_data = json.load(json_file)
+        REST_API_KEY = json_data['GOOGLE_CLIENT_ID']
+
+    REDIRECT_URI = f'{URL}accounts/login/google/callback/'
+    request_url = "https://accounts.google.com/o/oauth2/v2/auth?client_id={}&redirect_uri={}&response_type=code&scope=email%20profile%20openid".format(REST_API_KEY, REDIRECT_URI)
     
+    return redirect(request_url)
     
+def googleCallBack(request):
+    code = request.GET.get('code', None)
+
+    with open('./secrets.json') as json_file:
+        json_data = json.load(json_file)
+        REST_API_KEY = json_data['GOOGLE_CLIENT_ID']
+        SECRET_KEY = json_data['GOOGLE_SECRET_KEY']
+
+    request_url = 'https://www.googleapis.com/oauth2/v4/token'
+    headers = {
+        'Content-type': 'application/x-www-form-urlencoded'
+    }
+    body = {
+        'code':code,
+        'client_id':REST_API_KEY,
+        'client_secret':SECRET_KEY,
+        'redirect_uri':f'{URL}accounts/login/google/callback/',
+        'grant_type':'authorization_code'
+    }
+    token_response = requests.post(request_url,headers=headers,data=body)
+
+    headers = {
+        'Content-type': 'application/x-www-form-urlencoded; charset=utf-8',
+        'Authorization': 'Bearer {}'.format(token_response.json()['access_token'])
+    }
     
-    
-    
-       
+    info_url = 'https://www.googleapis.com/oauth2/v1/userinfo?access_token={}'.format(token_response.json()['access_token'])
+    user_info = requests.get(info_url).json()
+    try:
+        login_url = f'{URL}login/'
+        user = get_object_or_404(User, username=user_info['name']+'google')
+        body = {
+            'username':user_info['name']+'google',
+            'password':user_info['email']
+        }
+        token = requests.post(login_url, data=body)
+        response = JsonResponse(token.json())
+    except:
+        print('no')
+        signup_url = f'{URL}signup/'
+        body = {
+            'username':user_info['name']+'google',
+            'email':user_info['email'],
+            'password1':user_info['email'],
+            'password2':user_info['email']
+        }
+        token = requests.post(signup_url, data=body)
+        user = get_object_or_404(User, username=user_info['name']+'google')
+        user.name = user_info['name']
+        user.save()
+        response = JsonResponse(token.json())
+    return response
