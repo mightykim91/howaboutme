@@ -7,6 +7,9 @@ from rest_framework.response import Response
 from rest_framework.decorators import api_view, permission_classes
 from rest_framework.permissions import IsAuthenticated
 
+from firebase_admin import storage
+import pyrebase 
+
 from .serializers import UserSerializer, ProfileSerializer
 from .models import User, Profile
 
@@ -18,6 +21,9 @@ def set_profile(request):
     serializer = ProfileSerializer(data=request.data)
     if serializer.is_valid(raise_exception=True):
         serializer.save(user=request.user)
+        user = request.user
+        user.profile_saved = 1
+        user.save()
         return Response(serializer.data)
 
 
@@ -267,3 +273,15 @@ def naverCallBack(request):
         user.save()
         response = JsonResponse(token.json())
     return response
+
+@api_view(['POST'])
+@permission_classes([IsAuthenticated])
+def imageUpload(request):
+    with open('./secrets.json') as json_file:
+        json_data = json.load(json_file)
+        firebaseConfig = json_data['FIREBASE_CONFIG']
+    firebase = pyrebase.initialize_app(firebaseConfig)
+    storage = firebase.storage()
+    print(request.user.profile.nickname)
+    image_file = request.FILES['image']
+    storage.child(request.user.profile.nickname).put(image_file)
