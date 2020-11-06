@@ -51,6 +51,9 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'django.contrib.sites',
 
+    # CORS
+    'corsheaders',
+
     # DRF
     'rest_framework',
     'rest_framework.authtoken',
@@ -91,6 +94,7 @@ SOCIAL_ACCOUNT_PROVIDER = {
 
 
 MIDDLEWARE = [
+    'corsheaders.middleware.CorsMiddleware',
     'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.common.CommonMiddleware',
@@ -171,7 +175,9 @@ USE_L10N = True
 
 USE_TZ = True
 
-
+# CORS ALLOW
+# CORS_ALLOW_ALL_ORIGINS = True
+CORS_ORIGIN_ALLOW_ALL = True
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/3.1/howto/static-files/
 
