@@ -14,5 +14,4 @@ urlpatterns = [
     path('login/naver/', views.naverLogin),
     path('login/naver/callback/', views.naverCallBack),
     path('image/upload/', views.imageUpload),
-    path('test/', views.test),
 ]

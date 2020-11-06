@@ -19,14 +19,6 @@ from .models import User, Profile
 URL = 'http://127.0.0.1:8000/'
 FRONT_URL = 'http://localhost:8080/user/login'
 
-
-def test(request):
-    msg = {
-        'status': 'test'
-    }
-    return redirect('http: // www.naver.com/')
-
-
 @api_view(['POST'])
 @permission_classes([IsAuthenticated])
 def set_profile(request):
