@@ -478,3 +478,21 @@ def imageAnalysis(request):
             'msg':'fail'
         }
         return JsonResponse(msg, status=500)
+
+@api_view(['post'])
+@permission_classes([IsAuthenticated])
+def imageSimilarity(request):
+    try:
+        print(request.data['similarity'])
+        user = request.user
+        user.similarity = request.data['similarity']
+        user.save()
+        msg = {
+            'msg':'success'
+        }
+        return JsonResponse(msg, status=200)
+    except:
+        msg = {
+            'msg':'fail'
+        }
+        return JsonResponse(msg, status=500)
