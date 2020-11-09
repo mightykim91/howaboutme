@@ -483,7 +483,6 @@ def imageAnalysis(request):
 @permission_classes([IsAuthenticated])
 def imageSimilarity(request):
     try:
-        print(request.data['similarity'])
         user = request.user
         user.similarity = request.data['similarity']
         user.save()
