@@ -23,5 +23,6 @@ urlpatterns = [
     path('api/social/', include('allauth.urls')),
     path('accounts/', include('accounts.urls')),
     path('profiles/', include('profiles.urls')),
-    path('images/', include('images.urls'))
+    path('images/', include('images.urls')),
+    path('preferences/', include('preferences.urls')),
 ]

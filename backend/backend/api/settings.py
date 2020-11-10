@@ -71,6 +71,7 @@ INSTALLED_APPS = [
     'accounts',
     'profiles',
     'images',
+    'preferences'
 ]
 
 SITE_ID = 1

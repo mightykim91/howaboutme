@@ -1,0 +1,289 @@
+[
+    {
+        "model":"profiles.body",
+        "pk": 1,
+        "fields": {
+            "name": "마른"
+        }
+    },
+    {
+        "model":"profiles.body",
+        "pk": 2,
+        "fields": {
+            "name":"슬림"
+        }
+    },
+    {
+        "model":"profiles.body",
+        "pk": 3,
+        "fields": {
+            "name":"슬림 근육"
+        }
+    },
+    {
+        "model":"profiles.body",
+        "pk": 4,
+        "fields": {
+            "name":"보통"
+        }
+    },
+    {
+        "model":"profiles.body",
+        "pk": 5,
+        "fields": {
+            "name":"근육질"
+        }
+    },
+    {
+        "model":"profiles.body",
+        "pk": 6,
+        "fields": {
+            "name":"통통"
+        }
+    },
+    {
+        "model":"profiles.body",
+        "pk": 7,
+        "fields": {
+            "name":"우람"
+        }
+    },
+    {
+        "model":"profiles.area",
+        "pk": 1,
+        "fields": {
+            "name":"서울"
+        }
+    },
+    {
+        "model":"profiles.area",
+        "pk": 2,
+        "fields": {
+            "name":"경기도"
+        }
+    },
+    {
+        "model":"profiles.area",
+        "pk": 3,
+        "fields": {
+            "name":"부산"
+        }
+    },
+    {
+        "model":"profiles.area",
+        "pk": 4,
+        "fields": {
+            "name":"인천"
+        }
+    },
+    {
+        "model":"profiles.area",
+        "pk": 5,
+        "fields": {
+            "name":"대구"
+        }
+    },
+    {
+        "model":"profiles.area",
+        "pk": 6,
+        "fields": {
+            "name":"대전"
+        }
+    },
+    {
+        "model":"profiles.area",
+        "pk": 7,
+        "fields": {
+            "name":"광주"
+        }
+    },
+    {
+        "model":"profiles.area",
+        "pk": 8,
+        "fields": {
+            "name":"울산"
+        }
+    },
+    {
+        "model":"profiles.area",
+        "pk": 9,
+        "fields": {
+            "name":"세종시"
+        }
+    },
+    {
+        "model":"profiles.area",
+        "pk": 10,
+        "fields": {
+            "name":"충청남도"
+        }
+    },
+    {
+        "model":"profiles.area",
+        "pk": 11,
+        "fields": {
+            "name":"충청북도"
+        }
+    },
+    {
+        "model":"profiles.area",
+        "pk": 12,
+        "fields": {
+            "name":"경상남도"
+        }
+    },
+    {
+        "model":"profiles.area",
+        "pk": 13,
+        "fields": {
+            "name":"경상북도"
+        }
+    },
+    {
+        "model":"profiles.area",
+        "pk": 14,
+        "fields": {
+            "name":"전라남도"
+        }
+    },
+    {
+        "model":"profiles.area",
+        "pk": 15,
+        "fields": {
+            "name":"전라북도"
+        }
+    },
+    {
+        "model":"profiles.area",
+        "pk": 16,
+        "fields": {
+            "name":"강원도"
+        }
+    },
+    {
+        "model":"profiles.area",
+        "pk": 17,
+        "fields": {
+            "name":"제주도"
+        }
+    },
+    {
+        "model":"profiles.education",
+        "pk": 1,
+        "fields": {
+            "name":"고등학교 졸업"
+        }
+    },
+    {
+        "model":"profiles.education",
+        "pk": 2,
+        "fields": {
+            "name":"대학교 졸업"
+        }
+    },
+    {
+        "model":"profiles.education",
+        "pk": 3,
+        "fields": {
+            "name":"대학원 이상"
+        }
+    },
+    {
+        "model":"profiles.job",
+        "pk": 1,
+        "fields": {
+            "name":"학생"
+        }
+    },
+    {
+        "model":"profiles.job",
+        "pk": 2,
+        "fields": {
+            "name":"전문직"
+        }
+    },
+    {
+        "model":"profiles.job",
+        "pk": 3,
+        "fields": {
+            "name":"교육직"
+        }
+    },
+    {
+        "model":"profiles.job",
+        "pk": 4,
+        "fields": {
+            "name":"공무원"
+        }
+    },
+    {
+        "model":"profiles.job",
+        "pk": 5,
+        "fields": {
+            "name":"사업가"
+        }
+    },
+    {
+        "model":"profiles.job",
+        "pk": 6,
+        "fields": {
+            "name":"연구,기술직"
+        }
+    },
+    {
+        "model":"profiles.job",
+        "pk": 7,
+        "fields": {
+            "name":"군인"
+        }
+    },
+    {
+        "model":"profiles.job",
+        "pk": 8,
+        "fields": {
+            "name":"기타"
+        }
+    },
+    {
+        "model":"profiles.job",
+        "pk": 9,
+        "fields": {
+            "name":"무직"
+        }
+    },
+    {
+        "model":"profiles.religion",
+        "pk": 1,
+        "fields": {
+            "name":"무교"
+        }
+    },
+    {
+        "model":"profiles.religion",
+        "pk": 2,
+        "fields": {
+            "name":"기독교"
+        }
+    },
+    {
+        "model":"profiles.religion",
+        "pk": 3,
+        "fields": {
+            "name":"불교"
+        }
+    },
+    {
+        "model":"profiles.religion",
+        "pk": 4,
+        "fields": {
+            "name":"천주교"
+        }
+    },
+    {
+        "model":"profiles.religion",
+        "pk": 5,
+        "fields": {
+            "name":"기타"
+        }
+    }
+]
