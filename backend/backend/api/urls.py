@@ -22,4 +22,6 @@ urlpatterns = [
     path('signup/', include('rest_auth.registration.urls')),
     path('api/social/', include('allauth.urls')),
     path('accounts/', include('accounts.urls')),
+    path('profiles/', include('profiles.urls')),
+    path('images/', include('images.urls'))
 ]

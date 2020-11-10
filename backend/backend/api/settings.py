@@ -69,6 +69,8 @@ INSTALLED_APPS = [
 
     # custom app
     'accounts',
+    'profiles',
+    'images',
 ]
 
 SITE_ID = 1
@@ -136,7 +138,7 @@ DATABASES = {
         'ENGINE': 'django.db.backends.mysql',
         'NAME': 'howaboutme',
         'USER': 'root',
-        'PASSWORD': 'root',
+        'PASSWORD': 'tjfflsk159',
         'HOST': '127.0.0.1',
         'PORT': '3306'
     }
