@@ -10,40 +10,33 @@
         "model":"profiles.body",
         "pk": 2,
         "fields": {
-            "name":"슬림"
+            "name":"슬림 근육"
         }
     },
     {
         "model":"profiles.body",
         "pk": 3,
         "fields": {
-            "name":"슬림 근육"
+            "name":"보통"
         }
     },
     {
         "model":"profiles.body",
         "pk": 4,
         "fields": {
-            "name":"보통"
+            "name":"근육질"
         }
     },
     {
         "model":"profiles.body",
         "pk": 5,
         "fields": {
-            "name":"근육질"
-        }
-    },
-    {
-        "model":"profiles.body",
-        "pk": 6,
-        "fields": {
             "name":"통통"
         }
     },
     {
         "model":"profiles.body",
-        "pk": 7,
+        "pk": 6,
         "fields": {
             "name":"우람"
         }

@@ -1,10 +1,12 @@
 from django.db import models
 from accounts.models import User
-from profiles.models import Body,Education,Job,Religion
+from profiles.models import Body,Education,Job,Religion,Area
 
 class Preference(models.Model):
     user = models.OneToOneField(User, on_delete=models.CASCADE, related_name='preference')
-    area = models.CharField(max_length=20, default="")
+    area = models.ManyToManyField(
+        Area, related_name='preference'
+    )
     min_age = models.IntegerField(default=20)
     max_age = models.IntegerField(default=50)
     min_height = models.IntegerField(default=140)
