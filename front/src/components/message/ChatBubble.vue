@@ -1,7 +1,7 @@
 <template>
   <div>
-    <div v-if="chatlog.sender === 'Kim'" class='chat-bubble-partner'>
-      <div class='chat-bubble-left chat-bubble--left'>
+    <div v-if="chatlog.sender == 'Kim'" class='chat-bubble-partner'>
+      <div class='chat-bubble-right chat-bubble--right'>
         {{ chatlog.text }}
       </div>
     </div>
@@ -14,7 +14,7 @@
     </div> -->
     <!--  -->
     <div v-else class='chat-bubble-user'>
-      <div class='chat-bubble-right chat-bubble--right'>
+      <div class='chat-bubble-left chat-bubble--left'>
         {{ chatlog.text }}
       </div>
     </div>
