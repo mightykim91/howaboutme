@@ -1,0 +1,77 @@
+.container-controls {
+  z-index: 99999;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  display: flex;
+}
+
+.background-controls {
+  position: fixed;
+  width: 100vw;
+  height: 100vh;
+  background-color: rgba(0, 0, 0, 0.4);
+  z-index: 10;
+}
+
+.modal-controls {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  top: 0;
+  width: 100vw;
+  // height: 80%;
+  border-radius: 0 0 30px 30px;
+  background-color: white;
+  padding: 12px 24px;
+  z-index: 10;
+}
+
+.modal-header {
+  height: 50px;
+  width: 100%;
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  .header-title {
+    font-size: 19px;
+    line-height: 50px;
+  }
+}
+
+.modal-body {
+  height: 80%;
+  display: flex;
+  flex-direction: column;
+  // justify-content: space-around;
+  margin-top: 24px;
+  .control-item {
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start;
+    margin-bottom: 24px;
+    .control-title {
+      text-align: left;
+      //   margin-bottom: 10px;
+    }
+  }
+}
+
+/* 모달 푸터 */
+.modal-footer {
+  padding: inherit;
+  bottom: 0;
+  left: 0;
+  width: 100%;
+  display: flex;
+  justify-content: flex-end;
+  .btn-detail {
+    color: rgb(2, 117, 216);
+    font-size: 0.9rem;
+    outline: none;
+  }
+}
+
+.hide {
+  display: none;
+}

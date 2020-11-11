@@ -1,0 +1,19 @@
+svg {
+  width: 36px;
+  height: 36px;
+
+  path {
+    fill: rgb(241, 195, 195);
+    // stroke: black;
+    // stroke-width: 20;
+  }
+  //   g {
+  //     outline: 5px solid black;
+  //   }
+}
+
+.filled {
+  path {
+    fill: rgb(241, 195, 195);
+  }
+}

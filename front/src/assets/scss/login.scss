@@ -1,0 +1,53 @@
+#login {
+  box-sizing: border-box;
+  height: 100%;
+  background-repeat: no-repeat;
+  background-image: url("../images/background/background9.jpeg");
+  //   font-family
+  // width: 100%;
+  // -webkit-font-smoothing: antialiased;
+  // -moz-osx-font-smoothing: grayscale;
+  // width: 375px;
+  // margin: auto;
+  .login-form {
+    // width: 80%;
+    margin: 10px 0;
+    color: white;
+    text-align: left;
+    .login-slogan {
+      margin: 120px 40px 50px;
+      h2 {
+        font-size: 38px;
+        font-weight: 900;
+      }
+      small {
+        font-size: 18px;
+        opacity: 0.8;
+        font-weight: 900;
+      }
+    }
+  }
+  .theme--light.v-label {
+    color: white;
+  }
+  .submit-btn {
+    width: 100%;
+    margin: 10px 0;
+  }
+  .v-btn:not(.v-btn--round).v-size--default {
+    height: 45px;
+    border-radius: 5px;
+  }
+
+  .login-text {
+    text-align: left !important;
+  }
+  .login-btn {
+    width: 90%;
+    height: 55px;
+    margin: 4px auto;
+    border-radius: 5px;
+    // background-repeat: no-repeat;
+    // background-image: url("../images/icon/kakaologin.png");
+  }
+}

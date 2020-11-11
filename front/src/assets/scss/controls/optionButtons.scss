@@ -1,0 +1,33 @@
+.container-btns {
+  .wrapper-btn {
+    display: inline-block;
+    margin-top: 6px;
+    // border-top: 1px solid rgb(211, 211, 211);
+    // border-bottom: 1px solid rgb(211, 211, 211);
+    // border-right: 1px solid rgb(211, 211, 211);
+  }
+  .wrapper-left {
+    // border-left: 1px solid rgb(211, 211, 211);
+    border-radius: 6px 0 0 6px;
+  }
+  .wrapper-right {
+    border-radius: 0 6px 6px 0;
+  }
+  .btn {
+    padding: 5px 8px;
+    // border-radius: 6px;
+    outline: none;
+    border-top: 1px solid rgb(211, 211, 211);
+    border-bottom: 1px solid rgb(211, 211, 211);
+    border-right: 1px solid rgb(211, 211, 211);
+    font-size: 0.9rem;
+    color: rgb(0, 0, 0, 0.7);
+  }
+  .btn-left {
+    border-left: 1px solid rgb(211, 211, 211);
+    border-radius: 6px 0 0 6px;
+  }
+  .btn-right {
+    border-radius: 0 6px 6px 0;
+  }
+}

@@ -1,0 +1,23 @@
+.navbar {
+  .container-navbar {
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    height: 10vh;
+    background-color: white;
+    box-shadow: inset;
+    display: flex;
+    align-items: center;
+    justify-content: space-around;
+    border-radius: 24px 24px 0 0;
+    box-shadow: 0px -5px 100px rgb(211, 211, 211);
+  }
+  .navbar-item {
+    .navbar-btn {
+      display: flex;
+      align-items: center;
+      outline: none;
+    }
+  }
+}
