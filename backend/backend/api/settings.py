@@ -51,6 +51,9 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'django.contrib.sites',
 
+    # CORS
+    'corsheaders',
+
     # DRF
     'rest_framework',
     'rest_framework.authtoken',
@@ -60,11 +63,15 @@ INSTALLED_APPS = [
     'allauth.account',
     'allauth.socialaccount',
     'allauth.socialaccount.providers.kakao',
+    'allauth.socialaccount.providers.google',
     'rest_auth',
     'rest_auth.registration',
 
     # custom app
     'accounts',
+    'profiles',
+    'images',
+    'preferences'
 ]
 
 SITE_ID = 1
@@ -76,11 +83,21 @@ SOCIAL_ACCOUNT_PROVIDER = {
             'secret': '',
             'key': '',
         }
+    },
+    'google': {
+        'SCOPE': [
+            'profile',
+            'email',
+        ],
+        'AUTH_PARAMS': {
+            'access_type': 'online',
+        }
     }
 }
 
 
 MIDDLEWARE = [
+    'corsheaders.middleware.CorsMiddleware',
     'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.common.CommonMiddleware',
@@ -120,11 +137,11 @@ DATABASES = {
         # 'NAME': BASE_DIR / 'db.sqlite3',
 
         'ENGINE': 'django.db.backends.mysql',
-        'NAME': 'HowAboutMe',
+        'NAME': 'howaboutme',
         'USER': 'root',
-        'PASSWORD': 'root',
+        'PASSWORD': 'tjfflsk159',
         'HOST': '127.0.0.1',
-        'PORT': '33061'
+        'PORT': '3306'
     }
 }
 
@@ -161,7 +178,9 @@ USE_L10N = True
 
 USE_TZ = True
 
-
+# CORS ALLOW
+# CORS_ALLOW_ALL_ORIGINS = True
+CORS_ORIGIN_ALLOW_ALL = True
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/3.1/howto/static-files/
 
@@ -171,12 +190,12 @@ STATIC_URL = '/static/'
 REST_FRAMEWORK = {
     'DEFAULT_AUTHENTICATION_CLASSES': [
         'rest_framework_jwt.authentication.JSONWebTokenAuthentication',
+        'rest_framework.authentication.TokenAuthentication',
     ]
 }
 
 ACCOUNT_EMAIL_VERIFICATION = 'none'
 
-REST_USE_JWT = True
 
 JWT_AUTH = {
     'JWT_SECRET_KEY': SECRET_KEY,
@@ -188,3 +207,5 @@ JWT_AUTH = {
 
 # USE CUSTOM USER
 AUTH_USER_MODEL = 'accounts.User'
+
+REST_USE_JWT = True
