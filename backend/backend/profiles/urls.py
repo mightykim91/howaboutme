@@ -5,4 +5,5 @@ name = 'profiles'
 
 urlpatterns = [
     path('', views.ProfileView.as_view()),
+    path('partners/', views.get_partners),
 ]

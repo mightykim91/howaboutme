@@ -17,79 +17,10 @@ class ProfileView(APIView):
     permission_classes = [IsAuthenticated]
 
     def get(self, request):
-        gender = (request.user.profile.gender+1)%2
-        print(gender)
-
-        preference = Preference.objects.filter(user=request.user)
-        all_profiles = Profile.objects.filter(gender=gender)
-        print(len(preference))
-        if len(preference) == 0 or len(all_profiles) < 10:
-            profiles = list(Profile.objects.filter(gender=gender))
-            random.shuffle(profiles)
-            print(profiles)
-            serializer = ProfileListSerializer(profiles, many=True)
-        else:
-            serializer = PreferenceSerializer(preference[0])
-            # print(dir(serializer.data))
-            # print(serializer.data)
-            # print(len(preference[0].drink))
-            # print(preference[0].drink == "상관 없음")
-            if preference[0].drink == "상관 없음":
-                if preference[0].smoke == "상관 없음":
-                    print(1)
-                    profiles = Profile.objects.filter(
-                        Q(age__range=(preference[0].min_age,preference[0].max_age))
-                        &Q(height__range=(preference[0].min_height,preference[0].max_height))
-                        &Q(area__in=serializer.data['area'])&Q(body__in=serializer.data['body'])
-                        &Q(education__in=serializer.data['education'])&Q(job__in=serializer.data['job'])
-                        &Q(religion__in=serializer.data['religion'])&Q(gender=gender)
-                    )
-                else:
-                    print(2)
-                    profiles = Profile.objects.filter(
-                        Q(age__range=(preference[0].min_age,preference[0].max_age))
-                        &Q(height__range=(preference[0].min_height,preference[0].max_height))
-                        &Q(smoke__startswith=preference[0].smoke)
-                        &Q(area__in=serializer.data['area'])&Q(body__in=serializer.data['body'])
-                        &Q(education__in=serializer.data['education'])&Q(job__in=serializer.data['job'])
-                        &Q(religion__in=serializer.data['religion'])&Q(gender=gender)
-                    )
-            else:
-                if preference[0].smoke == "상관 없음":
-                    print(3)
-                    profiles = Profile.objects.filter(
-                        Q(age__range=(preference[0].min_age,preference[0].max_age))
-                        &Q(height__range=(preference[0].min_height,preference[0].max_height))
-                        &Q(drink__startswith=preference[0].drink)
-                        &Q(area__in=serializer.data['area'])&Q(body__in=serializer.data['body'])
-                        &Q(education__in=serializer.data['education'])&Q(job__in=serializer.data['job'])
-                        &Q(religion__in=serializer.data['religion'])&Q(gender=gender)
-                    )
-                else:
-                    print(4)
-                    profiles = Profile.objects.filter(
-                        Q(age__range=(preference[0].min_age,preference[0].max_age))
-                        &Q(height__range=(preference[0].min_height,preference[0].max_height))
-                        &Q(drink__startswith=preference[0].drink)&Q(smoke__startswith=preference[0].smoke)
-                        &Q(area__in=serializer.data['area'])&Q(body__in=serializer.data['body'])
-                        &Q(education__in=serializer.data['education'])&Q(job__in=serializer.data['job'])
-                        &Q(religion__in=serializer.data['religion'])&Q(gender=gender)
-                    )
-            # print(profiles)
-            profiles = list(profiles)
-            while len(profiles) < 10:
-                extra_profiles = list(Profile.objects.all())
-                random.shuffle(extra_profiles)
-                last_profile = extra_profiles[0]
-                for p in profiles:
-                    if last_profile.id == p.id:
-                        break
-                else:
-                    profiles.append(last_profile)
-                # print(profiles)
-            random.shuffle(profiles)
-            serializer = ProfileListSerializer(profiles, many=True)
+        profile = get_object_or_404(Profile, user=request.user)
+        serializer = ProfileListSerializer(profile)
         return Response(serializer.data)
+
 
     def post(self, request):
         data = request.data.dict()
@@ -143,3 +74,80 @@ class ProfileView(APIView):
         preference = get_object_or_404(Preference, user=request.user)
         preference.delete()
         return JsonResponse({'a':'a'}, status=200)
+
+@api_view(['get'])
+@permission_classes([IsAuthenticated])
+def get_partners(request):
+    gender = (request.user.profile.gender+1)%2
+    print(gender)
+
+    preference = Preference.objects.filter(user=request.user)
+    all_profiles = Profile.objects.filter(gender=gender)
+    print(len(preference))
+    if len(preference) == 0 or len(all_profiles) < 10:
+        profiles = list(Profile.objects.filter(gender=gender))
+        random.shuffle(profiles)
+        print(profiles)
+        serializer = ProfileListSerializer(profiles, many=True)
+    else:
+        serializer = PreferenceSerializer(preference[0])
+        # print(dir(serializer.data))
+        # print(serializer.data)
+        # print(len(preference[0].drink))
+        # print(preference[0].drink == "상관 없음")
+        if preference[0].drink == "상관 없음":
+            if preference[0].smoke == "상관 없음":
+                print(1)
+                profiles = Profile.objects.filter(
+                    Q(age__range=(preference[0].min_age,preference[0].max_age))
+                    &Q(height__range=(preference[0].min_height,preference[0].max_height))
+                    &Q(area__in=serializer.data['area'])&Q(body__in=serializer.data['body'])
+                    &Q(education__in=serializer.data['education'])&Q(job__in=serializer.data['job'])
+                    &Q(religion__in=serializer.data['religion'])&Q(gender=gender)
+                )
+            else:
+                print(2)
+                profiles = Profile.objects.filter(
+                    Q(age__range=(preference[0].min_age,preference[0].max_age))
+                    &Q(height__range=(preference[0].min_height,preference[0].max_height))
+                    &Q(smoke__startswith=preference[0].smoke)
+                    &Q(area__in=serializer.data['area'])&Q(body__in=serializer.data['body'])
+                    &Q(education__in=serializer.data['education'])&Q(job__in=serializer.data['job'])
+                    &Q(religion__in=serializer.data['religion'])&Q(gender=gender)
+                )
+        else:
+            if preference[0].smoke == "상관 없음":
+                print(3)
+                profiles = Profile.objects.filter(
+                    Q(age__range=(preference[0].min_age,preference[0].max_age))
+                    &Q(height__range=(preference[0].min_height,preference[0].max_height))
+                    &Q(drink__startswith=preference[0].drink)
+                    &Q(area__in=serializer.data['area'])&Q(body__in=serializer.data['body'])
+                    &Q(education__in=serializer.data['education'])&Q(job__in=serializer.data['job'])
+                    &Q(religion__in=serializer.data['religion'])&Q(gender=gender)
+                )
+            else:
+                print(4)
+                profiles = Profile.objects.filter(
+                    Q(age__range=(preference[0].min_age,preference[0].max_age))
+                    &Q(height__range=(preference[0].min_height,preference[0].max_height))
+                    &Q(drink__startswith=preference[0].drink)&Q(smoke__startswith=preference[0].smoke)
+                    &Q(area__in=serializer.data['area'])&Q(body__in=serializer.data['body'])
+                    &Q(education__in=serializer.data['education'])&Q(job__in=serializer.data['job'])
+                    &Q(religion__in=serializer.data['religion'])&Q(gender=gender)
+                )
+        # print(profiles)
+        profiles = list(profiles)
+        while len(profiles) < 10:
+            extra_profiles = list(Profile.objects.all())
+            random.shuffle(extra_profiles)
+            last_profile = extra_profiles[0]
+            for p in profiles:
+                if last_profile.id == p.id:
+                    break
+            else:
+                profiles.append(last_profile)
+            # print(profiles)
+        random.shuffle(profiles)
+        serializer = ProfileListSerializer(profiles, many=True)
+    return Response(serializer.data)
