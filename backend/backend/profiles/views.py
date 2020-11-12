@@ -17,11 +17,14 @@ class ProfileView(APIView):
     permission_classes = [IsAuthenticated]
 
     def get(self, request):
+        gender = (request.user.profile.gender+1)%2
+        print(gender)
+
         preference = Preference.objects.filter(user=request.user)
-        all_profiles = Profile.objects.all()
+        all_profiles = Profile.objects.filter(gender=gender)
         print(len(preference))
         if len(preference) == 0 or len(all_profiles) < 10:
-            profiles = list(Profile.objects.all())
+            profiles = list(Profile.objects.filter(gender=gender))
             random.shuffle(profiles)
             print(profiles)
             serializer = ProfileListSerializer(profiles, many=True)
@@ -39,7 +42,7 @@ class ProfileView(APIView):
                         &Q(height__range=(preference[0].min_height,preference[0].max_height))
                         &Q(area__in=serializer.data['area'])&Q(body__in=serializer.data['body'])
                         &Q(education__in=serializer.data['education'])&Q(job__in=serializer.data['job'])
-                        &Q(religion__in=serializer.data['religion'])
+                        &Q(religion__in=serializer.data['religion'])&Q(gender=gender)
                     )
                 else:
                     print(2)
@@ -49,7 +52,7 @@ class ProfileView(APIView):
                         &Q(smoke__startswith=preference[0].smoke)
                         &Q(area__in=serializer.data['area'])&Q(body__in=serializer.data['body'])
                         &Q(education__in=serializer.data['education'])&Q(job__in=serializer.data['job'])
-                        &Q(religion__in=serializer.data['religion'])
+                        &Q(religion__in=serializer.data['religion'])&Q(gender=gender)
                     )
             else:
                 if preference[0].smoke == "상관 없음":
@@ -60,7 +63,7 @@ class ProfileView(APIView):
                         &Q(drink__startswith=preference[0].drink)
                         &Q(area__in=serializer.data['area'])&Q(body__in=serializer.data['body'])
                         &Q(education__in=serializer.data['education'])&Q(job__in=serializer.data['job'])
-                        &Q(religion__in=serializer.data['religion'])
+                        &Q(religion__in=serializer.data['religion'])&Q(gender=gender)
                     )
                 else:
                     print(4)
@@ -70,7 +73,7 @@ class ProfileView(APIView):
                         &Q(drink__startswith=preference[0].drink)&Q(smoke__startswith=preference[0].smoke)
                         &Q(area__in=serializer.data['area'])&Q(body__in=serializer.data['body'])
                         &Q(education__in=serializer.data['education'])&Q(job__in=serializer.data['job'])
-                        &Q(religion__in=serializer.data['religion'])
+                        &Q(religion__in=serializer.data['religion'])&Q(gender=gender)
                     )
             # print(profiles)
             profiles = list(profiles)
