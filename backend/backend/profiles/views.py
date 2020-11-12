@@ -1,5 +1,6 @@
 from django.shortcuts import get_object_or_404
 from django.http import HttpResponse, JsonResponse
+from django.db.models import Q
 from rest_framework.response import Response
 from rest_framework.decorators import api_view, permission_classes
 from rest_framework.permissions import IsAuthenticated
@@ -8,20 +9,83 @@ from rest_framework.views import APIView
 from .serializers import ProfileSerializer, ProfileListSerializer
 from .models import Profile, Body, Job, Education, Area, Religion
 from preferences.models import Preference
+from preferences.serializers import PreferenceSerializer
+import random
+
 
 class ProfileView(APIView):
     permission_classes = [IsAuthenticated]
 
     def get(self, request):
         preference = Preference.objects.filter(user=request.user)
+        all_profiles = Profile.objects.all()
         print(len(preference))
-        if len(preference) == 0:
-            profiles = Profile.objects.all()
+        if len(preference) == 0 or len(all_profiles) < 10:
+            profiles = list(Profile.objects.all())
+            random.shuffle(profiles)
             print(profiles)
             serializer = ProfileListSerializer(profiles, many=True)
-            print(serializer)
-
-            
+        else:
+            serializer = PreferenceSerializer(preference[0])
+            # print(dir(serializer.data))
+            # print(serializer.data)
+            # print(len(preference[0].drink))
+            # print(preference[0].drink == "상관 없음")
+            if preference[0].drink == "상관 없음":
+                if preference[0].smoke == "상관 없음":
+                    print(1)
+                    profiles = Profile.objects.filter(
+                        Q(age__range=(preference[0].min_age,preference[0].max_age))
+                        &Q(height__range=(preference[0].min_height,preference[0].max_height))
+                        &Q(area__in=serializer.data['area'])&Q(body__in=serializer.data['body'])
+                        &Q(education__in=serializer.data['education'])&Q(job__in=serializer.data['job'])
+                        &Q(religion__in=serializer.data['religion'])
+                    )
+                else:
+                    print(2)
+                    profiles = Profile.objects.filter(
+                        Q(age__range=(preference[0].min_age,preference[0].max_age))
+                        &Q(height__range=(preference[0].min_height,preference[0].max_height))
+                        &Q(smoke__startswith=preference[0].smoke)
+                        &Q(area__in=serializer.data['area'])&Q(body__in=serializer.data['body'])
+                        &Q(education__in=serializer.data['education'])&Q(job__in=serializer.data['job'])
+                        &Q(religion__in=serializer.data['religion'])
+                    )
+            else:
+                if preference[0].smoke == "상관 없음":
+                    print(3)
+                    profiles = Profile.objects.filter(
+                        Q(age__range=(preference[0].min_age,preference[0].max_age))
+                        &Q(height__range=(preference[0].min_height,preference[0].max_height))
+                        &Q(drink__startswith=preference[0].drink)
+                        &Q(area__in=serializer.data['area'])&Q(body__in=serializer.data['body'])
+                        &Q(education__in=serializer.data['education'])&Q(job__in=serializer.data['job'])
+                        &Q(religion__in=serializer.data['religion'])
+                    )
+                else:
+                    print(4)
+                    profiles = Profile.objects.filter(
+                        Q(age__range=(preference[0].min_age,preference[0].max_age))
+                        &Q(height__range=(preference[0].min_height,preference[0].max_height))
+                        &Q(drink__startswith=preference[0].drink)&Q(smoke__startswith=preference[0].smoke)
+                        &Q(area__in=serializer.data['area'])&Q(body__in=serializer.data['body'])
+                        &Q(education__in=serializer.data['education'])&Q(job__in=serializer.data['job'])
+                        &Q(religion__in=serializer.data['religion'])
+                    )
+            # print(profiles)
+            profiles = list(profiles)
+            while len(profiles) < 10:
+                extra_profiles = list(Profile.objects.all())
+                random.shuffle(extra_profiles)
+                last_profile = extra_profiles[0]
+                for p in profiles:
+                    if last_profile.id == p.id:
+                        break
+                else:
+                    profiles.append(last_profile)
+                # print(profiles)
+            random.shuffle(profiles)
+            serializer = ProfileListSerializer(profiles, many=True)
         return Response(serializer.data)
 
     def post(self, request):
@@ -36,7 +100,7 @@ class ProfileView(APIView):
         data['area'] = area_pk
         religion_pk = get_object_or_404(Religion, name=request.data['religion']).id
         data['religion'] = religion_pk
-        print(data)
+        # print(data)
         serializer = ProfileSerializer(data=data)
         if serializer.is_valid(raise_exception=True):
             serializer.save(user=request.user)
