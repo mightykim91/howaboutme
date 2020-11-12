@@ -5,11 +5,24 @@ from rest_framework.decorators import api_view, permission_classes
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.views import APIView
 
-from .serializers import ProfileSerializer
+from .serializers import ProfileSerializer, ProfileListSerializer
 from .models import Profile, Body, Job, Education, Area, Religion
+from preferences.models import Preference
 
 class ProfileView(APIView):
     permission_classes = [IsAuthenticated]
+
+    def get(self, request):
+        preference = Preference.objects.filter(user=request.user)
+        print(len(preference))
+        if len(preference) == 0:
+            profiles = Profile.objects.all()
+            print(profiles)
+            serializer = ProfileListSerializer(profiles, many=True)
+            print(serializer)
+
+            
+        return Response(serializer.data)
 
     def post(self, request):
         data = request.data.dict()
@@ -58,3 +71,8 @@ class ProfileView(APIView):
                 'msg':'fail'
             }
             return JsonResponse(msg,status=500)
+    
+    def delete(self, request):
+        preference = get_object_or_404(Preference, user=request.user)
+        preference.delete()
+        return JsonResponse({'a':'a'}, status=200)

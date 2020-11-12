@@ -71,7 +71,7 @@ INSTALLED_APPS = [
     'accounts',
     'profiles',
     'images',
-    'preferences'
+    'preferences',
 ]
 
 SITE_ID = 1
@@ -196,6 +196,9 @@ REST_FRAMEWORK = {
 
 ACCOUNT_EMAIL_VERIFICATION = 'none'
 
+REST_AUTH_SERIALIZERS = {
+    'USER_DETAILS_SERIALIZER': 'accounts.serializers.UserSerializer'
+}
 
 JWT_AUTH = {
     'JWT_SECRET_KEY': SECRET_KEY,

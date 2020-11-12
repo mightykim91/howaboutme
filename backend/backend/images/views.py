@@ -103,6 +103,7 @@ def imageSimilarity(request):
     try:
         user = request.user
         user.similarity = request.data['similarity']
+        user.image_saved = 1
         user.save()
         msg = {
             'msg':'success'
