@@ -75,9 +75,9 @@ class ProfileView(APIView):
             return JsonResponse(msg,status=500)
     
     def delete(self, request):
-        preference = get_object_or_404(Preference, user=request.user)
-        preference.delete()
-        return JsonResponse({'a':'a'}, status=200)
+        profile = get_object_or_404(Profile, user=request.user)
+        profile.delete()
+        return JsonResponse({'msg':'success delete'}, status=200)
 
 @api_view(['get'])
 @permission_classes([IsAuthenticated])

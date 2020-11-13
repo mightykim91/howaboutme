@@ -166,4 +166,4 @@ class PreferenceView(APIView):
     def delete(self, request):
         preference = get_object_or_404(Preference, user=request.user)
         preference.delete()
-        return JsonResponse({'a':'a'}, status=200)
+        return JsonResponse({'msg':'delete success'}, status=200)

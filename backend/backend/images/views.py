@@ -106,7 +106,7 @@ def imageSimilarity(request):
         user.image_saved = 1
         user.save()
         msg = {
-            'msg':'success'
+            'similarity':request.data['similarity']
         }
         return JsonResponse(msg, status=200)
     except:
