@@ -25,7 +25,7 @@ class Profile(models.Model):
     height = models.FloatField()
     body = models.ForeignKey(Body, on_delete=models.CASCADE)
     hobby1 = models.CharField(max_length=50)
-    hobby2 = models.CharField(max_length=50)
+    hobby2 = models.CharField(max_length=50, null=True)
     blood = models.CharField(max_length=50)
     religion = models.ForeignKey(Religion, on_delete=models.CASCADE)
     smoke = models.CharField(max_length=50)

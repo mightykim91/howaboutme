@@ -30,7 +30,8 @@ class AreaSerializer(serializers.ModelSerializer):
 
 class ProfileSerializer(serializers.ModelSerializer):
     user = UserSerializer(required=False)
-
+    birth = serializers.DateField(format="%Y-%m-%d")
+    
     class Meta:
         model = Profile
         exclude = ['age']
