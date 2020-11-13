@@ -80,7 +80,6 @@ class ProfileView(APIView):
         return JsonResponse({'msg':'success delete'}, status=200)
 
 @api_view(['get'])
-@permission_classes([IsAuthenticated])
 def get_partners(request):
     gender = (request.user.profile.gender+1)%2
     print(gender)
