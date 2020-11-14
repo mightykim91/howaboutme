@@ -92,10 +92,11 @@ def get_partners(request):
     if len(preference) == 0 or len(all_profiles) < 10:
         profiles = list(Profile.objects.filter(gender=gender))
         random.shuffle(profiles)
-        print(profiles)
+        # print(type(profiles[0]))
         data = []
         for profile in profiles:
-            serializer = ProfileSerializer(profile)
+            # print(profile)
+            serializer = ProfileListSerializer(profile).data
             # print(dir(serializer))
             flag = False
             for like_id in like_users:
@@ -105,12 +106,20 @@ def get_partners(request):
     
             if flag:
                 serializer['like'] = True
+                # data.append(ProfileListSerializer(data=profile, like=True))
             else:
+                # data.append(ProfileListSerializer(data=profile, like=False))
                 serializer['like'] = False
-            
+            # print(serializer)
             data.append(serializer)
 
-        serializer = ProfileListSerializer(data, many=True)
+        # print(data)
+        # return Response(data)
+        # serializer = ProfileListSerializer(data=data, many=True)
+        # if serializer.is_valid(raise_exception=True):
+
+        #     return Response(serializer.data)
+        return Response(data)
     else:
         serializer = PreferenceSerializer(preference[0])
         # print(dir(serializer.data))
@@ -187,5 +196,4 @@ def get_partners(request):
                 serializer['like'] = False
             
             data.append(serializer)
-        serializer = ProfileListSerializer(data, many=True)
-    return Response(serializer.data)
+    return Response(data)
