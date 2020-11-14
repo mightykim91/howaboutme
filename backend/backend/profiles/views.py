@@ -81,6 +81,13 @@ class ProfileView(APIView):
 
 @api_view(['get'])
 @permission_classes([IsAuthenticated])
+def get_profile(request, user_id):
+    profile = get_object_or_404(Profile, user=user_id)
+    serializer = ProfileListSerializer(profile)
+    return Response(serializer.data)
+    
+@api_view(['get'])
+@permission_classes([IsAuthenticated])
 def get_partners(request):
     gender = (request.user.profile.gender+1)%2
     print(gender)
