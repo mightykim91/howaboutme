@@ -49,30 +49,30 @@ class ProfileView(APIView):
     
     def put(self,request):
         instance = get_object_or_404(Profile, user=request.user.id)
-        try:
-            data = request.data.dict()
-            body_pk = get_object_or_404(Body,name=request.data['body']).id
-            data['body'] = body_pk
-            job_pk = get_object_or_404(Job, name=request.data['job']).id
-            data['job'] = job_pk
-            education_pk = get_object_or_404(Education, name=request.data['education']).id
-            data['education'] = education_pk
-            area_pk = get_object_or_404(Area, name=request.data['area']).id
-            data['area'] = area_pk
-            religion_pk = get_object_or_404(Religion, name=request.data['religion']).id
-            data['religion'] = religion_pk
-            serializer = ProfileSerializer(instance, data=data)
-            if serializer.is_valid(raise_exception=True):
-                serializer.save()
-                msg = {
-                    'msg':'success'
-                }
-                return JsonResponse(msg, status=200)
-        except:
+        # try:    
+        data = request.data.dict()
+        body_pk = get_object_or_404(Body,name=request.data['body']).id
+        data['body'] = body_pk
+        job_pk = get_object_or_404(Job, name=request.data['job']).id
+        data['job'] = job_pk
+        education_pk = get_object_or_404(Education, name=request.data['education']).id
+        data['education'] = education_pk
+        area_pk = get_object_or_404(Area, name=request.data['area']).id
+        data['area'] = area_pk
+        religion_pk = get_object_or_404(Religion, name=request.data['religion']).id
+        data['religion'] = religion_pk
+        serializer = ProfileSerializer(instance, data=data)
+        if serializer.is_valid(raise_exception=True):
+            serializer.save()
             msg = {
-                'msg':'fail'
+                'msg':'success'
             }
-            return JsonResponse(msg,status=500)
+            return JsonResponse(msg, status=200)
+        # except:
+            # msg = {
+            #     'msg':'fail'
+            # }
+            # return JsonResponse(msg,status=500)
     
     def delete(self, request):
         profile = get_object_or_404(Profile, user=request.user)

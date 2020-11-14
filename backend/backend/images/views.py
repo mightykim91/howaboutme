@@ -58,84 +58,84 @@ def build_graph(hub_module_url, target_image_path):
 @api_view(['post'])
 @permission_classes([IsAuthenticated])
 def imageAnalysis(request):
-    try:
-        im1 = Image.open(request.FILES['image1'])
-        im2 = Image.open(request.FILES['image2'])
-        im1.save('target_image.jpg')
-        im2.save('compare_image.jpg')
-        images = glob('./*.jpg')
-        for i, im in enumerate(images):
-            face_detector = dlib.get_frontal_face_detector()
-            img = cv2.imread(im)
-            faces = face_detector(img)
+    # try:
+    im1 = Image.open(request.FILES['image1'])
+    im2 = Image.open(request.FILES['image2'])
+    im1.save('target_image.jpg')
+    im2.save('compare_image.jpg')
+    images = glob('./*.jpg')
+    for i, im in enumerate(images):
+        face_detector = dlib.get_frontal_face_detector()
+        img = cv2.imread(im)
+        faces = face_detector(img)
 
-            crop = img[faces[0].top():faces[0].bottom(), faces[0].left():faces[0].right()]
-            cv2.imwrite(im, crop)
-        image_bytes = []
-        image_bytes.append(tf.io.gfile.GFile('target_image.jpg','rb').read())
-        image_bytes.append(tf.io.gfile.GFile('compare_image.jpg','rb').read())
-        hub_module_url = "https://tfhub.dev/google/imagenet/mobilenet_v2_100_96/feature_vector/4" #@param {type:"string"}
-        with tf.Graph().as_default():
-            input_byte, similarity_op = build_graph(hub_module_url, 'target_image.jpg')
+        crop = img[faces[0].top():faces[0].bottom(), faces[0].left():faces[0].right()]
+        cv2.imwrite(im, crop)
+    image_bytes = []
+    image_bytes.append(tf.io.gfile.GFile('target_image.jpg','rb').read())
+    image_bytes.append(tf.io.gfile.GFile('compare_image.jpg','rb').read())
+    hub_module_url = "https://tfhub.dev/google/imagenet/mobilenet_v2_100_96/feature_vector/4" #@param {type:"string"}
+    with tf.Graph().as_default():
+        input_byte, similarity_op = build_graph(hub_module_url, 'target_image.jpg')
 
-            with tf.compat.v1.Session() as sess:
-                sess.run(tf.compat.v1.global_variables_initializer())
+        with tf.compat.v1.Session() as sess:
+            sess.run(tf.compat.v1.global_variables_initializer())
 
-                similarities = sess.run(similarity_op, feed_dict = {input_byte: image_bytes})
+            similarities = sess.run(similarity_op, feed_dict = {input_byte: image_bytes})
 
-        similar = round(similarities[1]*100)
-        msg = {
-            'msg':'success',
-            'similarity':str(similar)
-        }
-        os.remove('./target_image.jpg')
-        os.remove('./compare_image.jpg')
-        return JsonResponse(msg, status=200)
-    except:
-        msg = {
-            'msg':'fail'
-        }
-        return JsonResponse(msg, status=500)
+    similar = round(similarities[1]*100)
+    msg = {
+        'msg':'success',
+        'similarity':str(similar)
+    }
+    os.remove('./target_image.jpg')
+    os.remove('./compare_image.jpg')
+    return JsonResponse(msg, status=200)
+    # except:
+    #     msg = {
+    #         'msg':'fail'
+    #     }
+    #     return JsonResponse(msg, status=500)
 
 @api_view(['post'])
 @permission_classes([IsAuthenticated])
 def imageSimilarity(request):
-    try:
-        user = request.user
-        user.similarity = request.data['similarity']
-        user.image_saved = 1
-        user.save()
-        msg = {
-            'similarity':request.data['similarity']
-        }
-        return JsonResponse(msg, status=200)
-    except:
-        msg = {
-            'msg':'fail'
-        }
-        return JsonResponse(msg, status=500)
+    # try:
+    user = request.user
+    user.similarity = request.data['similarity']
+    user.image_saved = 1
+    user.save()
+    msg = {
+        'similarity':request.data['similarity']
+    }
+    return JsonResponse(msg, status=200)
+    # except:
+    #     msg = {
+    #         'msg':'fail'
+    #     }
+    #     return JsonResponse(msg, status=500)
 
 @api_view(['POST'])
 @permission_classes([IsAuthenticated])
 def imageUpload(request):
-    try:
-        with open('./secrets.json') as json_file:
-            json_data = json.load(json_file)
-            firebaseConfig = json_data['FIREBASE_CONFIG']
-        firebase = pyrebase.initialize_app(firebaseConfig)
-        storage = firebase.storage()
-        image_file = request.FILES['image']
-        storage.child(request.user.profile.nickname).put(image_file)
-        msg = {
-            'status': 'true',
-            'message': '이미지가 성공적으로 저장되었습니다.'
-        }
+    # try:
+    with open('./secrets.json') as json_file:
+        json_data = json.load(json_file)
+        firebaseConfig = json_data['FIREBASE_CONFIG']
+    firebase = pyrebase.initialize_app(firebaseConfig)
+    storage = firebase.storage()
+    image_file = request.FILES['image']
+    storage.child(request.user.profile.nickname).put(image_file)
+    msg = {
+        'status': 'true',
+        'message': '이미지가 성공적으로 저장되었습니다.'
+    }
 
-        return JsonResponse(msg, status=200)
-    except:
-        msg = {
-            'status': 'false',
-            'message': '이미지 저장에 실패했습니다.'
-        }
+    return JsonResponse(msg, status=200)
+    # except:
+    #     msg = {
+    #         'status': 'false',
+    #         'message': '이미지 저장에 실패했습니다.'
+    #     }
 
-        return JsonResponse(msg, status=500)
+    #     return JsonResponse(msg, status=500)
