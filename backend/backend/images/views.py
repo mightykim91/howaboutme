@@ -75,11 +75,11 @@ def imageAnalysis(request):
         crop = img[faces[0].top():faces[0].bottom(), faces[0].left():faces[0].right()]
         cv2.imwrite(im, crop)
     image_bytes = []
-    image_bytes.append(tf.io.gfile.GFile('target_image.jpg','rb').read())
-    image_bytes.append(tf.io.gfile.GFile('compare_image.jpg','rb').read())
+    image_bytes.append(tf.io.gfile.GFile('target_image.jpeg','rb').read())
+    image_bytes.append(tf.io.gfile.GFile('compare_image.jpeg','rb').read())
     hub_module_url = "https://tfhub.dev/google/imagenet/mobilenet_v2_100_96/feature_vector/4" #@param {type:"string"}
     with tf.Graph().as_default():
-        input_byte, similarity_op = build_graph(hub_module_url, 'target_image.jpg')
+        input_byte, similarity_op = build_graph(hub_module_url, 'target_image.jpeg')
 
         with tf.compat.v1.Session() as sess:
             sess.run(tf.compat.v1.global_variables_initializer())
@@ -91,8 +91,8 @@ def imageAnalysis(request):
         'msg':'success',
         'similarity':str(similar)
     }
-    os.remove('./target_image.jpg')
-    os.remove('./compare_image.jpg')
+    os.remove('./target_image.jpeg')
+    os.remove('./compare_image.jpeg')
     return JsonResponse(msg, status=200)
     # except:
     #     msg = {
