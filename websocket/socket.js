@@ -108,24 +108,9 @@ io.on('connection', (socket) => {
             return unread + 1;
           })
         }
-      io.to(socketId[messageFormat.sender]).to(socketId[messageFormat.receiver]).emit('new-message-fin', messageFormat)
-
-
-
-        // console.log(io.sockets)
-        // console.log('상대방 소켓: ' + socketId[messageFormat.receiver])
-        // io.to(socketId[messageFormat.reciever]).emit('new-message-fin')
-        // //update message if receiver is on chat
-        // const socketIdRef = database.ref(`/socketId/${messageFormat.receiver}`)
-        // socketIdRef.once('value').then(function(snapshot) {
-        //   const socketId = snapshot.val();
-        //   //io.in(socketId).emit('new-message-fin')
-        //   io.to(socketId[messageFormat.receiver]).emit('new-message-fin')
-        //   //socket.to(messageFormat.reciever).emit('new-message-fin')
-        // })
       })
-    })
-    
+      io.to(socketId[messageFormat.sender]).to(socketId[messageFormat.receiver]).emit('new-message-fin', messageFormat)
+      })
     //ChatLog fetcher
     socket.on('fetch-chatlog', chatInfo => {
       console.log('fetching chat logs....')
@@ -242,10 +227,3 @@ io.on('connection', (socket) => {
       })
     })
 })
-
-const checkPartnerSocketId = function(partnerId) {
-  const socketRef = database.ref('/socketId').child(partnerId)
-  socketRef.once('value').then(function(snapshot){
-    console.log('partner socket id ' + snapshot.val())
-  })
-}
