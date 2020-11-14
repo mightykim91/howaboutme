@@ -61,14 +61,17 @@ def imageAnalysis(request):
     # try:
     im1 = Image.open(request.FILES['image1'])
     im2 = Image.open(request.FILES['image2'])
+    print(im1)
+    print(im2)
     im1.save('target_image.jpg')
     im2.save('compare_image.jpg')
     images = glob('./*.jpg')
+    print(images)
     for i, im in enumerate(images):
         face_detector = dlib.get_frontal_face_detector()
         img = cv2.imread(im)
         faces = face_detector(img)
-
+        print(len(faces),'face cropped')
         crop = img[faces[0].top():faces[0].bottom(), faces[0].left():faces[0].right()]
         cv2.imwrite(im, crop)
     image_bytes = []
