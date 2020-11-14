@@ -84,7 +84,8 @@ class ProfileView(APIView):
 def get_partners(request):
     gender = (request.user.profile.gender+1)%2
     print(gender)
-
+    like_users = request.user.like.all().values('id')
+    print(like_users)
     preference = Preference.objects.filter(user=request.user)
     all_profiles = Profile.objects.filter(gender=gender)
     print(len(preference))
@@ -92,7 +93,24 @@ def get_partners(request):
         profiles = list(Profile.objects.filter(gender=gender))
         random.shuffle(profiles)
         print(profiles)
-        serializer = ProfileListSerializer(profiles, many=True)
+        data = []
+        for profile in profiles:
+            serializer = ProfileSerializer(profile)
+            # print(dir(serializer))
+            flag = False
+            for like_id in like_users:
+                if like_id['id'] == profile.user.id:
+                    flag = True
+                    break
+    
+            if flag:
+                serializer['like'] = True
+            else:
+                serializer['like'] = False
+            
+            data.append(serializer)
+
+        serializer = ProfileListSerializer(data, many=True)
     else:
         serializer = PreferenceSerializer(preference[0])
         # print(dir(serializer.data))
@@ -153,5 +171,21 @@ def get_partners(request):
                 profiles.append(last_profile)
             # print(profiles)
         random.shuffle(profiles)
-        serializer = ProfileListSerializer(profiles, many=True)
+        data = []
+        for profile in profiles:
+            serializer = ProfileSerializer(profile)
+            # print(dir(serializer))
+            flag = False
+            for like_id in like_users:
+                if like_id['id'] == profile.user.id:
+                    flag = True
+                    break
+    
+            if flag:
+                serializer['like'] = True
+            else:
+                serializer['like'] = False
+            
+            data.append(serializer)
+        serializer = ProfileListSerializer(data, many=True)
     return Response(serializer.data)

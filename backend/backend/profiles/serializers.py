@@ -31,7 +31,7 @@ class AreaSerializer(serializers.ModelSerializer):
 class ProfileSerializer(serializers.ModelSerializer):
     user = UserSerializer(required=False)
     birth = serializers.DateField(format="%Y-%m-%d")
-    
+    like = serializers.BooleanField(required=False)
     class Meta:
         model = Profile
         exclude = ['age']
@@ -42,6 +42,7 @@ class ProfileListSerializer(serializers.ModelSerializer):
     job = JobSerializer()
     area = AreaSerializer()
     education = EducationSerializer()
+    like = serializers.BooleanField(required=False)
 
     class Meta:
         model=Profile

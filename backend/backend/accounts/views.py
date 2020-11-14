@@ -213,5 +213,21 @@ def naverCallBack(request):
         response = JsonResponse(token.json())
     return response
 
-
-
+@api_view(['post'])
+@permission_classes([IsAuthenticated])
+def like(request):
+    print()
+    user = get_object_or_404(User, id=request.user.id)
+    likes = user.like.all()
+    partner = get_object_or_404(User, id=request.data['id'])
+    if partner not in likes:
+        user.like.add(partner)
+        msg = {
+            'msg':'success'
+        }
+        return JsonResponse(msg,status=200)
+    else:
+        msg = {
+            'msg':'fail'
+        }
+        return JsonResponse(msg,status=400)

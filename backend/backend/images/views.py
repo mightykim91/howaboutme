@@ -82,7 +82,7 @@ def imageAnalysis(request):
             sess.run(tf.compat.v1.global_variables_initializer())
 
             similarities = sess.run(similarity_op, feed_dict = {input_byte: image_bytes})
-
+            
     similar = round(similarities[1]*100)
     msg = {
         'msg':'success',
