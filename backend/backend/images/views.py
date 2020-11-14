@@ -64,7 +64,7 @@ def imageAnalysis(request):
     print(im1)
     print(im2)
     im1.save('target_image.jpeg')
-    im2.save('compare_image.jpg')
+    im2.save('compare_image.jpeg')
     images = glob('./*.jpg')
     print(images)
     for i, im in enumerate(images):
