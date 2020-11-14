@@ -65,7 +65,7 @@ def imageAnalysis(request):
     print(im2)
     im1.save('target_image.jpeg')
     im2.save('compare_image.jpeg')
-    images = glob('./*.jpg')
+    images = glob('./*.jpeg')
     print(images)
     for i, im in enumerate(images):
         face_detector = dlib.get_frontal_face_detector()
