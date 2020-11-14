@@ -63,7 +63,7 @@ def imageAnalysis(request):
     im2 = Image.open(request.FILES['image2'])
     print(im1)
     print(im2)
-    im1.save('target_image.jpg')
+    im1.save('target_image.jpeg')
     im2.save('compare_image.jpg')
     images = glob('./*.jpg')
     print(images)
