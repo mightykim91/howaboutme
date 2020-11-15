@@ -151,13 +151,23 @@ class PreferenceView(APIView):
         data['job'] = tmp
         print('---')
         tmp = []
-        if data['area'] == "모든 지역":
-            objects = Area.objects.all()
-            for obj in objects:
-                print(obj)
-                tmp.append(obj.id)
+        if len(data['area'][0]) != 1:
+            area = data['area'][0]
+            if area == "모든 지역":
+                objects = Area.objects.all()
+                for obj in objects:
+                    print(obj)
+                    tmp.append(obj.id)
+            else:
+                tmp.append(area)
         else:
-            tmp.append(data['area'])
+            if data['area'] == "모든 지역":
+                objects = Area.objects.all()
+                for obj in objects:
+                    print(obj)
+                    tmp.append(obj.id)
+            else:
+                tmp.append(data['area'])
         data['area'] = tmp
         print('---')
         tmp = []
