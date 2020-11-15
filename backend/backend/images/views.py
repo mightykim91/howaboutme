@@ -91,8 +91,8 @@ def imageAnalysis(request):
         'msg':'success',
         'similarity':str(similar)
     }
-    os.remove('./target_image.jpeg')
-    os.remove('./compare_image.jpeg')
+    #os.remove('./target_image.jpeg')
+    #os.remove('./compare_image.jpeg')
     return JsonResponse(msg, status=200)
     # except:
     #     msg = {
