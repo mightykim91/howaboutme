@@ -43,6 +43,7 @@ firebase.initializeApp(firebaseConfig);
 const database = firebase.database();
 
 let socketId = {}
+let socketByNickname = {}
 let sockets = {}
 //on socket connection
 io.on('connection', (socket) => {
@@ -58,14 +59,16 @@ io.on('connection', (socket) => {
       delete sockets[socket.id];
     })
 
-    socket.on('initialize-socket', userId => {
-      console.log(userId)
+    socket.on('initialize-socket', data => {
+      const userId = data.userId;
+      const userNickname = data.userNickname
       console.log('------INITIALIZING SOCKET------')
       if (userId === undefined || userId === null) {
         console.log('INITIALIZATION ERROR: missing user id')
       }
       else {
         socketId[userId] = socket.id
+        socketByNickName[userNickname] = socket.id
         socket.join(userId)
         const rooms = io.sockets.adapter.rooms
         if (rooms.has(userId)) {
@@ -138,7 +141,7 @@ io.on('connection', (socket) => {
         }
         
         if (messageFormat.sender != undefined && messageFormat.receiver != undefined) {
-          io.to(socketId[messageFormat.sender]).to(socketId[messageFormat.receiver]).emit('new-message-fin', messageFormat)
+          io.to(socketByNickname[messageFormat.sender]).to(socketByNickname[messageFormat.receiver]).emit('new-message-fin', messageFormat)
         }
       })
       .catch(function(error){
@@ -148,13 +151,13 @@ io.on('connection', (socket) => {
     
     //채팅 로그 가져오기
     socket.on('fetch-chatlog', chatInfo => {
-      console.log('------FETCHING CHAT LOG------')
+      console.log(`------FETCHING CHAT LOG OF ${chatInfo.sender}------`)
       const sender = chatInfo.sender;
       const receiver = chatInfo.receiver;
       const chatlogRef = database.ref(`/Logs/${sender}/Receiver/${receiver}`)
       chatlogRef.child('messages').once('value').then(function(snapshot) {
         console.log(snapshot.val())
-        io.to(socketId[sender]).emit('fetch-chatlog-callback', snapshot.toJSON())
+        io.to(socketByNickname[sender]).emit('fetch-chatlog-callback', snapshot.toJSON())
         socket.emit('fetch-chatlog-callback', snapshot.val())
       })
       .catch(function(error){
@@ -171,7 +174,7 @@ io.on('connection', (socket) => {
       const unreadRef = database.ref(`/Logs/${sender}/Receiver/${receiver}/unread`)
       unreadRef.once('value').then(function(snapshot) {
         console.log('unread value: ' + snapshot.val())
-        io.to(sender).emit('fetch-unread-count-callback', snapshot.val());
+        io.to(socketByNickname[sender]).emit('fetch-unread-count-callback', snapshot.val());
       })
       console.log('------END OF UNREAD MESSAGE COUNT------')
     });
@@ -207,7 +210,7 @@ io.on('connection', (socket) => {
       console.log('------FETCHING USERS ALL CHAT ROOM------')
       const chatRoomRef = database.ref(`/Logs/${user}/Receiver`)
       chatRoomRef.once('value').then(function(snapshot){
-        io.to(socketId[user]).emit('fetch-chatroom-callback', {rooms: snapshot.val()});
+        io.to(socketByNickname[user]).emit('fetch-chatroom-callback', {rooms: snapshot.val()});
       })
       .catch(function(error){
         console.log('------ERROR: FETCHING ALL CHAT ROOM ERROR: ' + error);
