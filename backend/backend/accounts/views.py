@@ -125,9 +125,13 @@ def googleCallBack(request):
     user_info = requests.get(info_url).json()
     try:
         login_url = '{}login/'.format(URL)
-        user = get_object_or_404(User, username=user_info['name']+'google')
+        username = ""
+        for s in name:
+            username += s
+        username += 'google'
+        user = get_object_or_404(User, username=username)
         body = {
-            'username': user_info['name']+'google',
+            'username': username,
             'password': user_info['email']
         }
         token = requests.post(login_url, data=body)
