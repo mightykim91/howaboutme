@@ -11,6 +11,7 @@ app.set('view engine', 'ejs');
 const server = require('http').Server(app);
 const io = require('socket.io')(server, {
   cors: {
+    //
     // origin: 'http://k3a507.p.ssafy.io',
     origin: true,
     methods: ['GET', 'POST']
