@@ -157,8 +157,7 @@ class PreferenceView(APIView):
                 print(obj)
                 tmp.append(obj.id)
         else:
-            for name in data['area']:
-                tmp.append(get_object_or_404(Area, name=name).id)
+            tmp.append(data['area'])
         data['area'] = tmp
         print('---')
         tmp = []
