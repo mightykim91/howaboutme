@@ -5,7 +5,7 @@ from rest_framework.views import APIView
 from rest_framework.permissions import IsAuthenticated
 
 from profiles.models import Body, Education, Job, Area, Religion
-from .serializers import PreferenceSerializer
+from .serializers import PreferenceSerializer,PreferenceResponseSerializer
 from .models import Preference
 
 class PreferenceView(APIView):
@@ -91,19 +91,19 @@ class PreferenceView(APIView):
             instance = get_object_or_404(Preference, user=request.user)
         except:
             data = {
-                "area": "모든 지역",
+                "area": [1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17],
                 "max_age": 50,
                 "min_age": 20,
                 "max_height": 200,
                 "min_height": 140,
-                "body": "상관 없음",
-                "education": "상관 없음",
-                "job": "상관 없음",
-                "religion": "상관 없음",
+                "body": [1,2,3,4,5,6],
+                "education": [1,2,3],
+                "job": [1,2,3,4,5,6,7,8,9],
+                "religion": [1,2,3,4,5],
                 "drink": "상관 없음",
                 "smoke": "상관 없음",
             }
-            serializer = PreferenceSerializer(data)
+            serializer = PreferenceSerializer(data=data)
             if serializer.is_valid(raise_exception=True):
                 serializer.save(user=request.user)
             instance = get_object_or_404(Preference, user=request.user)
@@ -174,7 +174,9 @@ class PreferenceView(APIView):
         serializer = PreferenceSerializer(instance,data=data)
         if serializer.is_valid(raise_exception=True):
             serializer.save(user = request.user)
-            return Response(serializer.data)
+        preference = get_object_or_404(Preference, user =request.user)
+        serializer = PreferenceResponseSerializer(preference)
+        return Response(serializer.data)
         # except:
         #     msg = {
         #         'msg':'fail'
