@@ -2,7 +2,7 @@
   <div>
     <i @click="closeModal" class="far fa-times-circle profile-modal-close"></i>
     <v-card class='profile-modal'>
-      <v-img :src="userData.src" class="profile-modal-img">
+      <v-img :src="src" class="profile-modal-img">
       </v-img>
       <div class='profile-modal-body'>
         <div v-if="state == 'up'">
@@ -36,7 +36,7 @@
                       직업
                     </div>
                     <div class='content'>
-                      {{ userData.job }}
+                      {{ userData.job.name }}
                     </div>
                   </div>
                   <div class='each body'>
@@ -44,7 +44,7 @@
                       체형
                     </div>
                     <div class='content'>
-                      {{ userData.body }}
+                      {{ userData.body.name }}
                     </div>
                   </div>
                   <div class='each religion'>
@@ -52,7 +52,7 @@
                       종교
                     </div>
                     <div class='content'>
-                      {{ userData.religion }}
+                      {{ userData.religion.name }}
                     </div>
                   </div>
                   <div class="each birth">
@@ -61,7 +61,7 @@
                   </div>
                   <div class="each location">
                     <i class="fas fa-map-marker-alt category"></i>
-                    <div class="content">{{ userData.area }}</div>
+                    <div class="content">{{ userData.area.name }}</div>
                   </div>
                 </div>
               </v-card>
@@ -125,6 +125,9 @@ export default {
         {"About": "hello i'm"},
       ]
     }
+  },
+  computed: {
+    src: `https://firebasestorage.googleapis.com/v0/b/focused-zephyr-294413.appspot.com/o/${this.userData.nickname}?alt=media`
   },
   methods: {
     closeModal() {
@@ -196,11 +199,11 @@ export default {
   justify-content: center;
 }
 .profile-modal-userinfo .titlea .name {
-  font-size: 1.4rem !important;
+  font-size: 1rem !important;
 }
 .profile-modal-userinfo .titlea .age {
   padding-left: 10px;
-  font-size: 1rem;
+  font-size: 0.8rem;
   color: gray;
   display: flex;
   align-items: flex-end;

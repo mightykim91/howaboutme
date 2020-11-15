@@ -1,6 +1,6 @@
 <template>
   <div>
-    <div v-if="chatlog.sender == 'Nam'" class='chat-bubble-user'>
+    <div v-if="chatlog.sender == user" class='chat-bubble-user'>
       <div class='chat-bubble-right chat-bubble--right'>
         <div v-if="checkEmoticon()">
           <i :class="chatlog.text" style="font-size: 40px;"></i>

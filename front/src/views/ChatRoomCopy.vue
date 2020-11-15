@@ -4,7 +4,7 @@
     <div class='chat'>
       <div class='chat-header'>
         <div class='chat-back'>
-          <i class="fas fa-chevron-left" @click="$router.push('/message')"></i>
+          <i class="fas fa-chevron-left" @click="$router.push('/main/message')"></i>
         </div>
         <div class='chat-profile'>
           <v-avatar style='background-color: white;' size='30'>

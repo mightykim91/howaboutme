@@ -11,7 +11,7 @@
         >
           <div class="info-key">성별</div>
           <div class="info-value">
-            {{ this.UserData.gender }}
+            {{ UserData.gender }}
           </div>
         </v-btn>
         <v-dialog v-model="dialog_gender" max-width="280">
@@ -29,14 +29,14 @@
         >
           <div class="info-key">생일</div>
           <div class="info-value">
-            {{ this.UserData.birth }}
+            {{ UserData.birth }}
           </div>
         </v-btn>
         <v-dialog v-model="dialog_birth" max-width="280">
           <Birth @closeBirth="closeBirth" @getBirth="getBirth" />
         </v-dialog>
       </v-row>
-      <v-row class="my-2" justify="center">
+      <!-- <v-row class="my-2" justify="center">
         <v-btn
           width="300px"
           rounded
@@ -46,13 +46,13 @@
         >
           <div class="info-key">닉네임</div>
           <div class="info-value">
-            {{ this.UserData.nickname }}
+            {{ UserData.nickname }}
           </div>
         </v-btn>
         <v-dialog v-model="dialog_nickname" max-width="280">
           <Nickname @closeNickname="closeNickname" @getNickname="getNickname" />
         </v-dialog>
-      </v-row>
+      </v-row> -->
       <v-row class="my-2" justify="center">
         <v-btn
           width="300px"
@@ -63,7 +63,7 @@
         >
           <div class="info-key">관심지역</div>
           <div class="info-value">
-            {{ this.UserData.area.name }}
+            {{ UserData.area }}
           </div>
         </v-btn>
         <v-dialog v-model="dialog_area" max-width="280">
@@ -79,12 +79,14 @@
           @click.stop="dialog_hobby = true"
         >
           <div class="info-key">취미</div>
-          <div v-if="this.hobbies.length === 1" class="info-value">
-            {{ this.UserData.hobby1 }}
-          </div>
-          <div v-if="this.hobbies.length === 2" class="info-value">
-            {{ this.UserData.hobby1 }}, {{ this.UserData.hobby2 }}
-          </div>
+            <div class="info-value">
+              <span v-if="UserData.hobby1">
+                {{ UserData.hobby1 }}
+              </span>
+              <span v-if="UserData.hobby2">
+                , {{ UserData.hobby2 }}
+              </span>
+            </div>
         </v-btn>
         <v-dialog v-model="dialog_hobby" max-width="280">
           <Hobby @closeHobby="closeHobby" @getHobby="getHobby" />
@@ -102,7 +104,7 @@
           >
             <div class="info-key">키</div>
             <div class="info-value info-value-half">
-              {{ this.UserData.height }}
+              {{ UserData.height }}
             </div>
           </v-btn>
           <v-dialog v-model="dialog_height" max-width="280">
@@ -119,7 +121,7 @@
           >
             <div class="info-key">혈액형</div>
             <div class="info-value info-value-half">
-              {{ this.UserData.blood }}
+              {{ UserData.blood }}
             </div>
           </v-btn>
           <v-dialog v-model="dialog_blood" max-width="280">
@@ -138,7 +140,7 @@
           >
             <div class="info-key">종교</div>
             <div class="info-value info-value-half">
-              {{ this.UserData.religion.name }}
+              {{ UserData.religion }}
             </div>
           </v-btn>
           <v-dialog v-model="dialog_religion" max-width="280">
@@ -158,7 +160,7 @@
           >
             <div class="info-key">음주</div>
             <div class="info-value info-value-half">
-              {{ this.UserData.drink }}
+              {{ UserData.drink }}
             </div>
           </v-btn>
           <v-dialog v-model="dialog_drink" max-width="280">
@@ -177,7 +179,7 @@
           >
             <div class="info-key">흡연</div>
             <div class="info-value info-value-half">
-              {{ this.UserData.smoke }}
+              {{ UserData.smoke }}
             </div>
           </v-btn>
           <v-dialog v-model="dialog_smoke" max-width="280">
@@ -194,7 +196,7 @@
           >
             <div class="info-key">학력</div>
             <div class="info-value info-value-half">
-              {{ this.UserData.education }}
+              {{ UserData.education }}
             </div>
           </v-btn>
           <v-dialog v-model="dialog_education" max-width="280">
@@ -216,7 +218,7 @@
           >
             <div class="info-key">체형</div>
             <div class="info-value info-value-half">
-              {{ this.UserData.body.name }}
+              {{ UserData.body }}
             </div>
           </v-btn>
           <v-dialog v-model="dialog_body" max-width="280">
@@ -233,7 +235,7 @@
           >
             <div class="info-key">직업</div>
             <div class="info-value info-value-half">
-              {{ this.UserData.job.name }}
+              {{ UserData.job }}
             </div>
           </v-btn>
           <v-dialog v-model="dialog_job" max-width="280">
@@ -252,7 +254,7 @@
         >
           <div class="info-key">간단 자기소개</div>
           <div class="info-value info-value-intro">
-            {{ this.UserData.intro }}
+            {{ UserData.intro }}
           </div>
         </v-btn>
         <v-dialog v-model="dialog_intro" max-height="100" max-width="280">
@@ -275,11 +277,13 @@
 </template>
 
 <script>
+import USERAPI from '@/api/UserApi';
+import axios from 'axios'
 import { mapGetters, mapActions } from "vuex";
 
 import Gender from "../../components/user/Gender.vue";
 import Birth from "../../components/user/Birth.vue";
-import Nickname from "../../components/user/Nickname.vue";
+// import Nickname from "../../components/user/Nickname.vue";
 import Area from "../../components/user/Area.vue";
 import Hobby from "../../components/user/Hobby.vue";
 import Height from "../../components/user/Height.vue";
@@ -296,7 +300,7 @@ export default {
   components: {
     Gender,
     Birth,
-    Nickname,
+    // Nickname,
     Area,
     Hobby,
     Height,
@@ -313,27 +317,10 @@ export default {
   data() {
     return {
       title: "프로필등록",
-      // UserData: {
-      //   gender: "",
-      //   birth: "",
-      //   nickname: "",
-      //   area: "",
-      //   hobby1: "",
-      //   hobby2: "",
-      //   height: "",
-      //   blood: "",
-      //   religion: "",
-      //   drink: "",
-      //   smoke: "",
-      //   education: "",
-      //   body: "",
-      //   job: "",
-      //   intro: "",
-      // },
-      hobbies: [],
+      UserData: {},
       dialog_gender: false,
       dialog_birth: false,
-      dialog_nickname: false,
+      // dialog_nickname: false,
       dialog_area: false,
       dialog_hobby: false,
       dialog_height: false,
@@ -349,7 +336,8 @@ export default {
   },
   computed: {
     ...mapGetters({
-      UserData: "user/getUserInfo",
+      // UserData: "user/getUserInfo",
+      config: "user/config"
     }), 
     isValid() {
       return (
@@ -395,9 +383,9 @@ export default {
       this.dialog_birth = false;
       // this.dialog_nickname = true;
     },
-    getNickname(nickname) {
-      this.UserData.nickname = nickname;
-    },
+    // getNickname(nickname) {
+    //   this.UserData.nickname = nickname;
+    // },
     closeNickname() {
       this.dialog_nickname = false;
       // this.dialog_area = true;
@@ -482,6 +470,15 @@ export default {
     },
   },
   watch: {},
+  mounted() {
+    axios.get(USERAPI.BASE_URL + '/profiles/', this.config)
+    .then(res => {
+      console.log(res)
+      this.UserData = res.data
+      this.UserData.user.delete
+    })
+    .catch(err => console.log(err.response))
+  }
 };
 </script>
 

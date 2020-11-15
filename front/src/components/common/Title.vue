@@ -25,6 +25,7 @@ export default {
   display: flex;
   background-color: rgb(241, 195, 195);
   border-radius: 0 0 25px 25px;
+  width: 100vw;
 }
 .title img {
   width: 50px;

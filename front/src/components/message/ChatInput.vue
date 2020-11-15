@@ -18,6 +18,7 @@
 
 <script>
 import Emoticon from "../message/Emoticon"
+import axios from "axios"
 import { mapGetters } from 'vuex'
 // import File from "../message/File"
 export default {
@@ -27,6 +28,7 @@ export default {
   computed: {
     ...mapGetters({
       userId: "user/getUserInfo.nickname",
+      config: "user/config"
     })
   },
   data() {
@@ -43,6 +45,11 @@ export default {
   },
   mounted() {
     document.querySelector(".content").focus()
+    axios.get("https://k3a507.p.ssafy.io:8000/profiles/", this.config)
+    .then(res => {
+      this.myId = res.data.nickname
+      console.log(this.myId)
+    })
   },
   methods: {
     emoticonBtn() {

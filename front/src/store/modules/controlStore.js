@@ -1,6 +1,5 @@
 import axios from "axios";
 import UserApi from "@/api/UserApi.js"
-import userStore from "@/store/modules/userStore.js"
 
 
 
@@ -62,8 +61,8 @@ export default {
     },
   },
   actions: {
-    updateControls(getters) {
-      axios.put(`${UserApi.BASE_URL}/preferences/`, getters.getControlInfo, userStore.getters.config)
+    updateControls({getters, rootGetters}) {
+      axios.put(`${UserApi.BASE_URL}/preferences/`, getters.getControlInfo, rootGetters['user/config'])
       .then ((res) => {
         console.log(res)
       })

@@ -33,7 +33,7 @@
     right: -1px;
     width: 20px;
     height: 20px;
-    z-index: 9999;
+    z-index: 500;
   }
   input {
     display: none;
@@ -66,6 +66,9 @@
   }
 }
 //유사도2
+
+//sweetalert
+
 
 .button {
   background: rgb(253, 208, 208);
@@ -300,8 +303,8 @@
 }
 
 .loader4:after {
-  content: "LOADING ...";
-  color: #eab5b5;
+  content: "유사도 측정중...";
+  color: #EBABAB;
   font-family: Lato, "Helvetica Neue";
   font-weight: 200;
   font-size: 16px;

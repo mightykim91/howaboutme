@@ -69,29 +69,6 @@
               <button
                 class="btn-right btn-body"
                 @click="selectOption"
-                value="카페가기"
-              >
-                카페가기
-              </button>
-            </div>
-          </v-col> </v-row
-        ><v-row>
-          <v-col class="col-6" style="padding: 0px">
-            <div class="wrapper-btn">
-              <button
-                class="btn-left btn-body"
-                @click="selectOption"
-                value="영화보기"
-              >
-                영화보기
-              </button>
-            </div>
-          </v-col>
-          <v-col class="col-6" style="padding: 0px">
-            <div class="wrapper-btn">
-              <button
-                class="btn-right btn-body"
-                @click="selectOption"
                 value="춤추기"
               >
                 춤추기

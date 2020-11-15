@@ -3,7 +3,7 @@
   <div class="container-profile">
     <div class="profile-header">
       <div class="header-background">
-        <h2 class="header-title">{{ nickname }}님의 프로필</h2>
+        <div class="header-title"><span class="nickname">{{ nickname }}</span></div>
         <div class="container-tabs">
           <button id="tab-notifications" class="btn-tab" @click="openNotifications">알림함</button>
           <button id="tab-userinfo" class="btn-tab" @click="openUserInfo">회원정보 수정</button>
@@ -15,7 +15,7 @@
           <button class="btn btn-uploadimg" v-if="showUserInfo" @click="openProfilePic"><i class="fas fa-camera"></i></button>
         </div>
         <div class="img-similarity">
-          유사도: {{ similarity }}%
+          <!-- 유사도: {{ similarity }}% -->
         </div>
       </div>
     </div>
@@ -51,11 +51,11 @@ export default {
   computed: {
     ...mapGetters({
       nickname: "user/getNickname",
-      similarity: "user/getSimilarity",
+      // similarity: "user/getSimilarity",
     }),
     myImageURL() {
       // return `https://firebasestorage.googleapis.com/v0/b/focused-zephyr-294413.appspot.com/o/${this.nickname}?alt=media`
-      return `https://firebasestorage.googleapis.com/v0/b/focused-zephyr-294413.appspot.com/o/동키짱짱짱?alt=media`
+      return `https://firebasestorage.googleapis.com/v0/b/focused-zephyr-294413.appspot.com/o/${this.nickname}?alt=media`
     }
   },
   methods: {

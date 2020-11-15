@@ -63,7 +63,7 @@
             </div>
             <br>
             <div v-if="onClick" class="loading-bars">
-              <span  class="gauge-loader">Loading&#8230;</span>
+              <span  class="gauge-loader">&#8230;</span>
               <div class="box">
                 <div class="loader4"></div>
                 <!-- <p>loader 4</p> -->
@@ -108,9 +108,9 @@
       class="mx-auto my-2"
       color="#f1c3c3"
       dark
-      :disabled="onClick"
+      
       @click="checkSimilarity"
-      v-if="uploadImage && cameraImage && !similarity"
+      v-if="uploadImage && cameraImage && !similarity && !onClick"
     >유사도 측정
     </v-btn>
     <v-btn
@@ -132,7 +132,7 @@ import axios from "axios"
 
 import USERAPI from "@/api/UserApi.js"
 import Title from "../../components/common/Title";
-import { mapGetters, mapState } from 'vuex';
+import { mapGetters, mapState,mapActions } from 'vuex';
 
 export default {
   name:"Upload",
@@ -152,11 +152,14 @@ export default {
     }
   },
   computed:{
-    ...mapState('user',['authToken']),
+    ...mapState('user',['authToken','userInfo']),
     ...mapGetters('user',['config']),
+    // ...mapMutations('user',['setSimilarity'])
 
   },
   methods:{
+    ...mapActions('user',['setSimilarity']),
+
     onChangeUploadImages(e) {
         // console.log(e.target.files)
         this.uploadImage = this.$refs.imageInput.files[0]
@@ -181,9 +184,11 @@ export default {
           })
           .then((res)=>{
             console.log(res)
+
           }).catch((err)=>{
             // console.log('요청후')
             this.$swal('','정확한 분석을 위해\n선명한 사진을 사용해주세요. ','warning')
+            
             console.log(err)
           })
         // })
@@ -220,35 +225,54 @@ export default {
         this.similarity = res.data.similarity.slice(-5,-2)
         this.onClick = 0
       }).catch(()=>{
-        this.$swal('','정확한 분석을 위해\n선명한 사진을 사용해주세요. ','warning')
+        // this.$swal('','정확한 분석을 위해\n선명한 사진을 사용해주세요. ','warning')
+        this.$swal({
+          title: '',
+          text: '유사도 측정이 어렵습니다.\n셀프 촬영시, 핸드폰을 사진처럼\n오른쪽으로 90도 회전해서 촬영해보세요.',
+          imageUrl: 'https://firebasestorage.googleapis.com/v0/b/focused-zephyr-294413.appspot.com/o/rotate_pic.png?alt=media&token=09ff0dc0-deb7-4652-8a02-73ab30698b57',
+          imageWidth: 150,
+          imageHeight: 100,
+          confirmButtonText: '확인',
+          imageAlt: 'Custom image',
+        })
+
         this.onClick = false
       })
     },
     uploadDelete() {
-      this.uploadImage = null,
-      this.uploadPreview = null,
-      this.similarity = null
-      // console.log(image)
+      if (this.onClick){
+        this.$swal('','유사도 분석중에는 사진을 지울 수 없습니다.','warning')
+      }else{
+        this.uploadImage = null,
+        this.uploadPreview = null,
+        this.similarity = null
+      }
       // const name = e.target.getAttribute("name");
       // image = null
       // this.files = this.files.filter((data) => data.number !== Number(name));
     },
     cameraDelete() {
-      this.cameraImage = null,
-      this.cameraPreview = null
-      this.similarity = null
-
+      if (this.onClick){
+        this.$swal('','유사도 분석중에는 사진을 지울 수 없습니다.','warning')
+      }else{
+        this.cameraImage = null,
+        this.cameraPreview = null
+        this.similarity = null
+      } 
       },
     isValid(){
       this.$swal('','유사도 측정을 위해서는\n'+'사진이 모두 업로드되어야 합니다.','warning')
     },
     emitSimilarity(){
       const similarity = parseInt(this.similarity)
-      console.log(similarity)
+      // console.log(similarity)
       axios.post(USERAPI.BASE_URL + '/images/similarity/', {'similarity':similarity}, this.config)
       .then((res)=>{
         res
         // console.log(res)
+        // this.setSimilarity(res.data.similarity)
+        // console.log(res.data.similarity)
+        this.setSimilarity(similarity)
         this.$router.push({name:'Main'})
       })
       .catch((err)=>{
@@ -256,6 +280,9 @@ export default {
       })
     }
   },
+  created(){
+    console.log(this.userInfo)
+  }
   // watch:{
   //   showSimilarity(){
   //     if (this.similarity){
@@ -269,5 +296,6 @@ export default {
 </script>
 
 <style lang="scss" scoped>
+
     @import "@/assets/scss/user/upload.scss";
 </style>

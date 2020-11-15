@@ -21,7 +21,7 @@ const io = require('socket.io')(server, {
 //server.listen(8000);
 
 //DEPLOY
-server.listen(3000);
+server.listen(3030);
 
 app.get('/', function(req, res) {
  res.json({message: "welcome to websocket for ssafy 507"})
@@ -236,7 +236,7 @@ io.on('connection', (socket) => {
       //좋아요 보낸 유저
       console.log(`------RECEIVED LIKE ALARM FROM ${data.sender}, WHO LIKES ${data.receiver}------`)
       const sender = data.senderId;
-      const nickname = data.sendernickname;
+      const nickname = data.senderNickname;
       //받는사람
       const receiver = data.receiver;
       //Front의 NavBar로 전송할 내용
@@ -249,9 +249,9 @@ io.on('connection', (socket) => {
       io.to(socketId[receiver]).emit('incoming-like-alarm');
 
       //TEST용 전소켓 메세지
-      io.sockets.emit('incoming-like-alarm')
+      //io.sockets.emit('incoming-like-alarm')
       //DB에 저장
-      const likeRef = database.ref(`/Logs/suzi/`)
+      const likeRef = database.ref(`/Logs/${receiver}/`)
       const message = {
           text: `${sender}님이 당신을 좋아합니다.`,
           isRead: false,
@@ -275,13 +275,13 @@ io.on('connection', (socket) => {
     //좋아요 메세지 로그 호출 함수
     socket.on('fetch-like-log', data => {
       console.log('------FETCHING LIKE MESSAGE LOG------')
-      //const user = data.user;
-      const user = 'suzi';
+      const user = data.user;
+      //const user = 'suzi';
       const logRef = database.ref(`Logs/${user}/likeLog`)
       logRef.once('value').then(function(snapshot) {
         const likeLogArray = Object.values(snapshot.val())
-        //io.to(userId[user]).emit('fetch-like-log-reply', likeLogArray)
-        io.sockets.emit('fetch-like-log-reply', snapshot.val())
+        io.to(userId[user]).emit('fetch-like-log-reply', likeLogArray)
+        //io.sockets.emit('fetch-like-log-reply', likeLogArray)
         console.log('------FINISHED FETCHING LIKE MESSAGE LOG------')
       })
       .catch(function(error){

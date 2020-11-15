@@ -76,23 +76,31 @@ export default {
         this.profileActive = false;
       },
       moveToChat() {
-        this.$router.push("/message")
+        this.$router.push("/main/message")
         this.mainActive = false;
         this.chatActive = true;
         this.profileActive = false;
       },
       moveToProfile() {
-        this.$router.push("/profile")
+        this.$router.push("/main/profile")
         this.mainActive = false;
         this.chatActive = false;
         this.profileActive = true;
         this.unreadSignal = false;
-        //
       },
     },
+<<<<<<< HEAD
     created: function() {
       this.$socket.on('incoming-like-alarm', () => {
         this.unreadSignal = true;
+=======
+    mounted: function() {
+      this.$socket.on('incoming-like-alarm', (data) => {
+        console.log(data)
+        if (data) {
+          this.unreadSignal = true;
+        }
+>>>>>>> d0c527b981307508477cf50a5b22503aa234fd73
       })
     }
 }

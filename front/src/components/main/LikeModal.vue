@@ -51,6 +51,8 @@ export default {
     return {
       coin: 2,
       state: true,
+      myId: '',
+      myNickname: '',
       //김연수 추가
       partner: this.userData.id,
       // user: 'yeonsu'
@@ -60,15 +62,14 @@ export default {
     okBtn() {
       if (this.coin > 0) {
         //하트 알람 보내기
-        this.$socket.emit('likeAlarm', {senderId: this.user, senderNickname: this.nickname ,receiver: this.partner});
+        this.$socket.emit('likeAlarm', {senderId: this.myId, senderNickname: this.myNickname ,receiver: this.partner});
 
         this.coin = this.coin - 2
         document.querySelector('.heart-animation').classList.remove('hide')
-        this.$emit("like", this.userData.id)
-        console.log(this.userData.id)
-        axios.post(USERAPI.BASE_URL + "/accounts/like/",this.userData.id ,this.config)
-        .then(res => {
-          console.log(res)
+        // console.log(this.userData.id)
+        axios.post(USERAPI.BASE_URL + "/accounts/like/", { id: this.userData.id} ,this.config)
+        .then(() => {
+          this.$emit("like", this.userData.id)
         })
         .catch(err => {
           console.log(err.response)
@@ -92,6 +93,12 @@ export default {
     }
   },
   mounted() {
+    axios.get("https://k3a507.p.ssafy.io:8000/profiles/", this.config)
+    .then(res => {
+      this.myId = res.data.id
+      this.myNickname = res.data.nickname
+      console.log(this.myId, this.myNickname)
+    })
   }
 
 }
@@ -137,6 +144,7 @@ export default {
 .like-modal-body .name {
   color: #B2DFDB;
   font-size: 1rem;
+  margin-right: 4px !important;
 }
 .like-modal-btns {
   height: 25%;

@@ -1,7 +1,13 @@
 <template>
   <div class="container-notificationBox">
       <!-- <Notification v-for="user in users" :key="user.i" :user="user" /> -->
+<<<<<<< HEAD
       <Notification v-for="msg in likeMessages" :key="msg.key" :msg="msg" @clickProfile="onClickProfile" />
+=======
+      <div v-if="newMessages">
+        <Notification v-for="msg in newMessages" :key="msg.key" :msg="msg" @clickProfile="onClickProfile" />
+      </div>
+>>>>>>> d0c527b981307508477cf50a5b22503aa234fd73
       <v-dialog v-model="showProfile">
         <ProfileModal @closeModal="showProfile=false" :userData="user" />
       </v-dialog>
@@ -31,6 +37,7 @@ export default {
         return {
           showProfile: false,
           user: {},
+<<<<<<< HEAD
           users: [
             {
               id: 1,
@@ -134,6 +141,9 @@ export default {
             },
           ],
           likeMessages: [],
+=======
+          newMessages: []
+>>>>>>> d0c527b981307508477cf50a5b22503aa234fd73
         }
     },
     methods: {
@@ -142,8 +152,9 @@ export default {
         this.showProfile = true;
       }
     },
+    // 여기 닉네임으로 받나요?? 
     mounted: function(){
-      this.$socket.emit('fetch-like-log', { 'user': this.userId });
+      this.$socket.emit('fetch-like-log', { 'user': this.nickname });
       this.$socket.on('fetch-like-log-reply', likeMessages => {
         const newMsg = Object.values(likeMessages);
         //key가 보낸사람 아이디, value가 메세지 내용

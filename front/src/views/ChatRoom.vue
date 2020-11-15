@@ -4,12 +4,12 @@
     <div class='chat'>
       <div class='chat-header'>
         <div class='chat-back'>
-          <i class="fas fa-chevron-left" @click="$router.push('/message')"></i>
+          <i class="fas fa-chevron-left" @click="$router.push('/main/message')"></i>
         </div>
         <div class='chat-profile'>
           <v-avatar style='background-color: white;' size='30'>
             <v-img
-                src="https://www.popularitas.com/wp-content/uploads/2018/04/user-hero-blue.png"></v-img>
+                :src="src"></v-img>
           </v-avatar>
           {{ $route.params.partner }}
         </div>
@@ -18,14 +18,6 @@
         </div>
       </div>
       <div id="app_chat_list" class='chat-content'>
-        <!-- <ChatBubble :user=user />
-        <ChatBubble :user=emoticon />
-        <ChatBubble :user="!user" />
-        <ChatBubble :user=user />
-        <ChatBubble :user="user" />
-        <ChatBubble :user=emoticon />
-        <ChatBubble :user="!user" />
-        <ChatBubble :user=user /> -->
         <ChatBubble 
         v-for="log in chatlog" 
         v-bind:key="log.id" 
@@ -61,15 +53,26 @@
 import ChatBubble from "../components/message/ChatBubble"
 import ChatInput from "../components/message/ChatInput"
 import Title from "../components/common/Title"
+<<<<<<< HEAD
 import Peer from "simple-peer"
+=======
+import { mapGetters } from 'vuex'
+
+>>>>>>> d0c527b981307508477cf50a5b22503aa234fd73
 export default {
   props: {
     partner: String,
   },
+  computed: {
+    ...mapGetters ({
+      nickname: "user/userInfo.nickname"
+    }),
+    src: `https://firebasestorage.googleapis.com/v0/b/focused-zephyr-294413.appspot.com/o/${this.partner}?alt=media`
+  },
   data() {
     return {
       title:"Message",
-      user: "Nam",
+      user: this.nickname,
       myPartner: this.partner,
       emoticon: 'emoticon',
       chatlog: '',
