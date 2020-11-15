@@ -221,7 +221,7 @@ def get_partners(request):
         random.shuffle(profiles)
         data = []
         for profile in profiles:
-            serializer = ProfileSerializer(profile).data
+            serializer = ProfileListSerializer(profile).data
             # print(dir(serializer))
             flag = False
             for like_id in like_users:
