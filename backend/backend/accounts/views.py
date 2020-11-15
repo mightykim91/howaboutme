@@ -153,10 +153,12 @@ def googleCallBack(request):
         # response = Response(serializer.data)
     except:
         signup_url = '{}signup/'.format(URL)
-        print(user_info['name']+'google')
-        print(user_info['email'])
+        name = user_info['name'].split()
+        username = ""
+        for s in name:
+            username += s
         body = {
-            'username': user_info['name']+'google',
+            'username': username+'google',
             'password1': user_info['email'],
             'password2': user_info['email']
         }
