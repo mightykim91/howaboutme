@@ -154,16 +154,16 @@ def googleCallBack(request):
         response = JsonResponse(token_json)
         # response = Response(serializer.data)
     except:
-        print(user_info)
+        # print(user_info)
         signup_url = '{}signup/'.format(URL)
         name = user_info['name'].split()
         username = ""
         for s in name:
             username += s
         username += 'google'
-        print(username)
-        print(user_info['name']+'google')
-        print(user_info['email'])
+        # print(username)
+        # print(user_info['name']+'google')
+        # print(user_info['email'])
         body = {
             'username': username,
             'password1': user_info['email'],
