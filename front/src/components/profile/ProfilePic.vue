@@ -2,10 +2,6 @@
   <div class="container-profilepic hide">
       <div class="profilepic-background" @click="closeModal"></div>
       <div class="profilepic-modal">
-          <!-- <i @click="closeModal" class="fas fa-times btn-close"></i>
-          <div class="modal-header">
-            프로필 사진 변경
-          </div> -->
           <div class="modal-body">
               <div class="upload-img">
                   <div class="upload-preview" @click="clickUploadBtn"></div>
@@ -16,7 +12,7 @@
               <div class="camera-img">
                   <div class="camera-preview" @click="clickCameraBtn"></div>
                   <label><img class="icon-pic" src="@/assets/images/icon/camera2.png"></label>
-                  <input type="file" accept="image/*" capture="camera" id="cameraImg" @change="previewCamera">
+                  <input type="file" accept="image/*" capture="camera" id="cameraImg" @change="readURL">
               </div>
               <div class="similarity" v-if="!similarityChecked">
                   <Loading v-if="loading" />
@@ -56,14 +52,16 @@ export default {
             loading: false,
             similarityChecked: false,
             similarity: null,
+            authToken: "JWT eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJ1c2VyX2lkIjoxMDIsInVzZXJuYW1lIjoiXHViMGE4XHViM2Q5XHVhZGRjZ29vZ2xlIiwiZXhwIjoxNjA1OTYzOTc5LCJlbWFpbCI6IiIsIm9yaWdfaWF0IjoxNjA1MzU5MTc5fQ.xB_N9qx9AK6GSTx03FnNWhQWgaakg_XqY2Vy8NCQeN0",
         }
     },
     computed: {
         ...mapGetters({
-            authToken: "user/getAuthToken",
+            // authToken: "user/getAuthToken",
             config: "user/config",
             // similarity: "user/getSimilarity",
         }),
+        // ...mapGetters('user',['getAuthToken']),
     },
     methods: {
         ...mapMutations({
@@ -84,10 +82,10 @@ export default {
             this.uploadedURL = URL.createObjectURL(event.target.files[0]);
             preview.style.backgroundImage = `url('${this.uploadedURL}')`;
         },
-        previewCamera(event) {
+        previewCamera() {
             var preview = document.querySelector('.camera-preview');
-            this.camerafile = event.target.files[0];
-            this.cameraURL = URL.createObjectURL(event.target.files[0]);
+            // this.camerafile = event.target.files[0];
+            // this.cameraURL = URL.createObjectURL(event.target.files[0]);
             preview.style.backgroundImage = `url('${this.cameraURL}')`;
         },
         getSimilarity(event) {
@@ -97,13 +95,13 @@ export default {
             let formData = new FormData();
             formData.append("image1", this.uploadedfile);
             formData.append("image2", this.camerafile);
-            
+
             axios.post(
                 `${UserApi.BASE_URL}/images/analysis/`,
                 formData,
                 {
                     headers: {
-                        Authorization: this.authToken,
+                        "Authorization": this.authToken,
                         "Content-Type": "multipart/form-data",
                     }
                 }
@@ -159,6 +157,76 @@ export default {
             .catch(() => {
                 // alert("프로필 이미지 등록에 실패했습니다. 다시 시도해주세요.")
             })
+        },
+        readURL(event) {
+            var btn = event.target;
+            btn.disabled = true;
+            let result = this.resizeMe(event.target.files[0]);
+            result.then((url) => {
+                this.cameraURL = url;
+                this.previewCamera();
+                this.createFile();
+                btn.disabled = false;
+            }).catch(err => alert(err))
+        },
+        resizeMe(file) {
+            return new Promise(function(resolve, reject) {
+                var dataURL = "x";
+                var reader = new FileReader();
+                reader.onloadend = function () {
+                var tempImg = new Image();
+                tempImg.src = reader.result;
+                tempImg.onload = function () {
+                    var MAX_WIDTH = 800;
+                    var MAX_HEIGHT = 600;
+                    var tempW = tempImg.width;
+                    var tempH = tempImg.height;
+                    if (tempW > tempH) {
+                        if (tempW > MAX_WIDTH) {
+                            tempH *= MAX_WIDTH / tempW;
+                            tempW = MAX_WIDTH;
+                        }
+                    } else {
+                        if (tempH > MAX_HEIGHT) {
+                            tempW *= MAX_HEIGHT / tempH;
+                            tempH = MAX_HEIGHT;
+                        }
+                    }
+            
+                    var canvas = document.createElement('canvas');
+                    canvas.width = tempW;
+                    canvas.height = tempH;
+                    var ctx = canvas.getContext("2d");
+                    if (document.documentElement.clientWidth < 674) {
+                        canvas.width = tempH;
+                        canvas.height = tempW;
+                        // var ctx = canvas.getContext("2d");
+                        ctx.translate(tempH, 0);
+                        ctx.rotate(90 * Math.PI / 180);
+                    }
+                    ctx.drawImage(this, 0, 0, tempW, tempH);
+                    dataURL = canvas.toDataURL("image/jpeg");
+                    resolve(dataURL);
+                };
+                tempImg.onerror = function(err) {
+                    console.log(err)
+                    reject("can't load the image");
+                }
+            };
+            reader.readAsDataURL(file);
+            });
+        },
+        async createFile() {
+            await fetch(this.cameraURL)
+                .then((res) => {
+                    let data = res.blob();
+                    let metadata = {
+                        type: "image/jpeg",
+                    }
+                    this.camerafile = new File([data], "photoTaken.jpg", metadata);
+                    console.log(this.camerafile)
+                })
+                .catch((err) => console.log(err))
         }
     },
     mounted() {
