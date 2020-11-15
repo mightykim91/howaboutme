@@ -1,6 +1,6 @@
 from django.shortcuts import get_object_or_404
 from django.http import HttpResponse, JsonResponse
-from django.db.models import Q
+from django.db.models import Q,F
 from rest_framework.response import Response
 from rest_framework.decorators import api_view, permission_classes
 from rest_framework.permissions import IsAuthenticated
@@ -10,6 +10,8 @@ from .serializers import ProfileSerializer, ProfileListSerializer
 from .models import Profile, Body, Job, Education, Area, Religion
 from preferences.models import Preference
 from preferences.serializers import PreferenceSerializer
+from accounts.models import User
+
 import random
 
 
@@ -120,8 +122,9 @@ def get_partners(request):
     preference = Preference.objects.filter(user=request.user)
     all_profiles = Profile.objects.filter(gender=gender)
     # print(len(preference))
+    active_users = User.objects.filter(image_saved=1)
     if len(preference) == 0 or len(all_profiles) < 5:
-        profiles = list(Profile.objects.filter(gender=gender))
+        profiles = list(Profile.objects.filter(Q(gender=gender)&Q(user__in=active_users)))
         random.shuffle(profiles)
         profiles = profiles[:5]
         # print(type(profiles[0]))
@@ -167,6 +170,7 @@ def get_partners(request):
                     &Q(area__in=serializer.data['area'])&Q(body__in=serializer.data['body'])
                     &Q(education__in=serializer.data['education'])&Q(job__in=serializer.data['job'])
                     &Q(religion__in=serializer.data['religion'])&Q(gender=gender)
+                    &Q(user__in=active_users)
                 )
             else:
                 print(2)
@@ -177,6 +181,7 @@ def get_partners(request):
                     &Q(area__in=serializer.data['area'])&Q(body__in=serializer.data['body'])
                     &Q(education__in=serializer.data['education'])&Q(job__in=serializer.data['job'])
                     &Q(religion__in=serializer.data['religion'])&Q(gender=gender)
+                    &Q(user__in=active_users)
                 )
         else:
             if preference[0].smoke == "상관 없음":
@@ -188,6 +193,7 @@ def get_partners(request):
                     &Q(area__in=serializer.data['area'])&Q(body__in=serializer.data['body'])
                     &Q(education__in=serializer.data['education'])&Q(job__in=serializer.data['job'])
                     &Q(religion__in=serializer.data['religion'])&Q(gender=gender)
+                    &Q(user__in=active_users)
                 )
             else:
                 print(4)
@@ -198,6 +204,7 @@ def get_partners(request):
                     &Q(area__in=serializer.data['area'])&Q(body__in=serializer.data['body'])
                     &Q(education__in=serializer.data['education'])&Q(job__in=serializer.data['job'])
                     &Q(religion__in=serializer.data['religion'])&Q(gender=gender)
+                    &Q(user__in=active_users)
                 )
         # print(profiles)
         profiles = list(profiles)
