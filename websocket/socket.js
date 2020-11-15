@@ -52,6 +52,9 @@ io.on('connection', (socket) => {
     if (!sockets[socket.id]) {
         sockets[socket.id] = socket.id;
     }
+    var USER_ID = ''
+    var USER_NICKNAME = ''
+
     io.sockets.emit('allUsers',sockets)
 
     socket.on('disconnect', ()=>{
@@ -66,6 +69,8 @@ io.on('connection', (socket) => {
       }
       else {
         const userId = data.userId;
+        USER_ID = data.userId;
+        USER_NICKNAME = data.userNickname
         const userNickname = data.userNickname
         console.log('------INITIALIZING SOCKET------')
         if (userId === undefined || userId === null) {
@@ -81,6 +86,7 @@ io.on('connection', (socket) => {
           }
         }
         console.log('------INITIALIZING SOCKET FINISHED------')
+        console.log(USER_ID, USER_NICKNAME)
     }
     })
     
