@@ -166,8 +166,8 @@ io.on('connection', (socket) => {
       console.log(`------FETCHING CHAT LOG OF ${USER_NICKNAME} WITH ${chatInfo.receiver}------`)
       const sender = chatInfo.sender;
       const receiver = chatInfo.receiver;
-      const encodeSender = escape(sender)
-      const encodeReceiver = escape(receiver)
+      const encodeSender = encodeURIComponent(sender)
+      const encodeReceiver = encodeURIComponent(receiver)
       const chatlogRef = database.ref(`/Logs/${encodeSender}/Receiver/${encodeReceiver}`)
       chatlogRef.child('messages').once('value').then(function(snapshot) {
         console.log(snapshot.val())
