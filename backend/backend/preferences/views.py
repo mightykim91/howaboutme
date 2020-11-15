@@ -108,10 +108,10 @@ class PreferenceView(APIView):
                 serializer.save(user=request.user)
             instance = get_object_or_404(Preference, user=request.user)
         # try:
-        iter_data = request.data.lists()
+        iter_data = request.data
         data = {}
         many_fields = ['body','education','area','religion','job']
-        for key,val in iter_data:
+        for key,val in iter_data.items():
             if key not in many_fields:
                 data[key] = val[0]
                 continue
