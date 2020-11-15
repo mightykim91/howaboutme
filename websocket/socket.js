@@ -43,7 +43,7 @@ firebase.initializeApp(firebaseConfig);
 const database = firebase.database();
 
 let socketId = {}
-let socketByNickname = {}
+let socketByNickName = {}
 let sockets = {}
 //on socket connection
 io.on('connection', (socket) => {
@@ -141,7 +141,7 @@ io.on('connection', (socket) => {
         }
         
         if (messageFormat.sender != undefined && messageFormat.receiver != undefined) {
-          io.to(socketByNickname[messageFormat.sender]).to(socketByNickname[messageFormat.receiver]).emit('new-message-fin', messageFormat)
+          io.to(socketByNickName[messageFormat.sender]).to(socketByNickName[messageFormat.receiver]).emit('new-message-fin', messageFormat)
         }
       })
       .catch(function(error){
@@ -157,7 +157,7 @@ io.on('connection', (socket) => {
       const chatlogRef = database.ref(`/Logs/${sender}/Receiver/${receiver}`)
       chatlogRef.child('messages').once('value').then(function(snapshot) {
         console.log(snapshot.val())
-        io.to(socketByNickname[sender]).emit('fetch-chatlog-callback', snapshot.toJSON())
+        io.to(socketByNickName[sender]).emit('fetch-chatlog-callback', snapshot.toJSON())
         socket.emit('fetch-chatlog-callback', snapshot.val())
       })
       .catch(function(error){
@@ -174,7 +174,7 @@ io.on('connection', (socket) => {
       const unreadRef = database.ref(`/Logs/${sender}/Receiver/${receiver}/unread`)
       unreadRef.once('value').then(function(snapshot) {
         console.log('unread value: ' + snapshot.val())
-        io.to(socketByNickname[sender]).emit('fetch-unread-count-callback', snapshot.val());
+        io.to(socketByNickName[sender]).emit('fetch-unread-count-callback', snapshot.val());
       })
       console.log('------END OF UNREAD MESSAGE COUNT------')
     });
@@ -210,7 +210,7 @@ io.on('connection', (socket) => {
       console.log('------FETCHING USERS ALL CHAT ROOM------')
       const chatRoomRef = database.ref(`/Logs/${user}/Receiver`)
       chatRoomRef.once('value').then(function(snapshot){
-        io.to(socketByNickname[user]).emit('fetch-chatroom-callback', {rooms: snapshot.val()});
+        io.to(socketByNickName[user]).emit('fetch-chatroom-callback', {rooms: snapshot.val()});
       })
       .catch(function(error){
         console.log('------ERROR: FETCHING ALL CHAT ROOM ERROR: ' + error);
