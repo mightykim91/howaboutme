@@ -154,21 +154,23 @@ def googleCallBack(request):
         response = JsonResponse(token_json)
         # response = Response(serializer.data)
     except:
+        print(user_info)
         signup_url = '{}signup/'.format(URL)
         name = user_info['name'].split()
         username = ""
         for s in name:
             username += s
+        username += 'google'
         print(username)
         print(user_info['name']+'google')
         print(user_info['email'])
         body = {
-            'username': username+'google',
+            'username': username,
             'password1': user_info['email'],
             'password2': user_info['email']
         }
         token = requests.post(signup_url, data=body)
-        user = get_object_or_404(User, username=user_info['name']+'google')
+        user = get_object_or_404(User, username=username)
         user.name = user_info['name']
         user.save()
         response = JsonResponse(token.json())
