@@ -60,13 +60,14 @@ io.on('connection', (socket) => {
     })
 
     socket.on('initialize-socket', data => {
-      const userId = data.userId;
-      const userNickname = data.userNickname
       console.log('------INITIALIZING SOCKET------')
       if (userId === undefined || userId === null) {
         console.log('INITIALIZATION ERROR: missing user id')
       }
       else {
+        console.log(data)
+        const userId = data.userId;
+        const userNickname = data.userNickname
         socketId[userId] = socket.id
         socketByNickName[userNickname] = socket.id
         socket.join(userId)
@@ -250,7 +251,7 @@ io.on('connection', (socket) => {
         'receiver': receiver
       }
       //받는사람한테 보내기
-      io.to(socketId[receiver]).emit('incoming-like-alarm');
+      io.to(socketByNickName[receiver]).emit('incoming-like-alarm');
 
       //TEST용 전소켓 메세지
       //io.sockets.emit('incoming-like-alarm')
