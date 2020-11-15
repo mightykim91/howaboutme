@@ -157,6 +157,9 @@ def googleCallBack(request):
         username = ""
         for s in name:
             username += s
+        print(username)
+        print(user_info['name']+'google')
+        print(user_info['email'])
         body = {
             'username': username+'google',
             'password1': user_info['email'],
