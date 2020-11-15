@@ -90,15 +90,16 @@ def get_profile(request, user_id):
 @permission_classes([IsAuthenticated])
 def get_partners(request):
     gender = (request.user.profile.gender+1)%2
-    print(gender)
+    # print(gender)
     like_users = request.user.like.all().values('id')
-    print(like_users)
+    # print(like_users)
     preference = Preference.objects.filter(user=request.user)
     all_profiles = Profile.objects.filter(gender=gender)
-    print(len(preference))
-    if len(preference) == 0 or len(all_profiles) < 10:
+    # print(len(preference))
+    if len(preference) == 0 or len(all_profiles) < 5:
         profiles = list(Profile.objects.filter(gender=gender))
         random.shuffle(profiles)
+        profiles = profiles[:5]
         # print(type(profiles[0]))
         data = []
         for profile in profiles:
@@ -176,7 +177,7 @@ def get_partners(request):
                 )
         # print(profiles)
         profiles = list(profiles)
-        while len(profiles) < 10:
+        while len(profiles) < 5:
             extra_profiles = list(Profile.objects.all())
             random.shuffle(extra_profiles)
             last_profile = extra_profiles[0]
