@@ -28,8 +28,8 @@ DEBUG = True
 # Production Level
 #DEBUG = False
 
-ALLOWED_HOSTS = ["*"]
-
+# ALLOWED_HOSTS = ["*"]
+ALLOWED_HOSTS = ["k3a507.p.ssafy.io"]
 
 AUTHENTICATION_BACKENDS = [
     # Needed to login by username in Django admin, regardless of `allauth`
@@ -139,8 +139,10 @@ DATABASES = {
         'ENGINE': 'django.db.backends.mysql',
         'NAME': 'howaboutme',
         'USER': 'root',
-        'PASSWORD': 'tjfflsk159',
-        'HOST': '127.0.0.1',
+        # 'PASSWORD': 'tjfflsk159',
+        # 'HOST': '127.0.0.1',
+        'PASSWORD': 'howaboutme507',
+        'HOST': '172.17.0.1',
         'PORT': '3306'
     }
 }

@@ -18,8 +18,10 @@ from profiles.models import Profile
 from preferences.serializers import PreferenceResponseSerializer
 from preferences.models import Preference
 
-URL = 'http://127.0.0.1:8000/'
-FRONT_URL = 'http://localhost:8080/user/login'
+# URL = 'http://127.0.0.1:8000/'
+# FRONT_URL = 'http://localhost:8080/user/login'
+URL = 'https://k3a507.p.ssafy.io:8000/'
+FRONT_URL = 'https://k3a507.p.ssafy.io/user/login'
 
 # initial kakao login
 def kakaoLogin(request):
