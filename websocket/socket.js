@@ -153,6 +153,7 @@ io.on('connection', (socket) => {
       const receiver = chatInfo.receiver;
       const chatlogRef = database.ref(`/Logs/${sender}/Receiver/${receiver}`)
       chatlogRef.child('messages').once('value').then(function(snapshot) {
+        console.log(snapshot.val())
         io.to(socketId[sender]).emit('fetch-chatlog-callback', snapshot.toJSON())
         socket.emit('fetch-chatlog-callback', snapshot.val())
       })
@@ -277,20 +278,25 @@ io.on('connection', (socket) => {
       console.log(`------FETCHING LIKE MESSAGE LOG: ${data.user}------`)
       const user = data.user;
       //const user = 'suzi';
-      const logRef = database.ref(`Logs/${user}/likeLog`)
-      logRef.once('value').then(function(snapshot) {
-        if (snapshot.val() === null || snapshot.val() === undefined){
-          console.log(`------NO DATA------`)
-        } else {
-          const likeLogArray = Object.values(snapshot.val())
-          io.to(userId[user]).emit('fetch-like-log-reply', likeLogArray)
-          //io.sockets.emit('fetch-like-log-reply', likeLogArray)
-          console.log('------FINISHED FETCHING LIKE MESSAGE LOG------')
-        }
-      })
-      .catch(function(error){
-        console.log('ERROR: FETCHING LIKE MESSAGE LOG ERROR: ' + error)
-      })
+      if (user) {
+        const logRef = database.ref(`Logs/${user}/likeLog`)
+        logRef.once('value').then(function(snapshot) {
+          if (snapshot.val() === null || snapshot.val() === undefined){
+            console.log(`------NO DATA------`)
+          } else {
+            const likeLogArray = Object.values(snapshot.val())
+            io.to(userId[user]).emit('fetch-like-log-reply', likeLogArray)
+            //io.sockets.emit('fetch-like-log-reply', likeLogArray)
+            console.log('------FINISHED FETCHING LIKE MESSAGE LOG------')
+          }
+        })
+        .catch(function(error){
+          console.log('ERROR: FETCHING LIKE MESSAGE LOG ERROR: ' + error)
+        })
+      }
+      else {
+        console.log('ERROR: FETCHING MESSAGE LOG ERROR => USER IS NOT PRESENTED')
+      }
     })
 })
 
