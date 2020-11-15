@@ -113,7 +113,6 @@ class PreferenceView(APIView):
         data = {}
         many_fields = ['body','education','area','religion','job']
         for key,val in iter_data.items():
-            print(key, val)
             if key not in many_fields:
                 data[key] = val
                 continue
