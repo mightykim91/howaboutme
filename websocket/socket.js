@@ -163,13 +163,13 @@ io.on('connection', (socket) => {
     
     //채팅 로그 가져오기
     socket.on('fetch-chatlog', chatInfo => {
-      console.log(`------FETCHING CHAT LOG OF ${USER_NICKNAME}------`)
+      console.log(`------FETCHING CHAT LOG OF ${USER_NICKNAME} WITH ${chatInfo.receiver}------`)
       const sender = chatInfo.sender;
       const receiver = chatInfo.receiver;
       const chatlogRef = database.ref(`/Logs/${sender}/Receiver/${receiver}`)
       chatlogRef.child('messages').once('value').then(function(snapshot) {
         console.log(snapshot.val())
-        io.to(socketByNickName[USER_NICKNAME]).emit('fetch-chatlog-callback', snapshot.toJSON())
+        io.to(socketByNickName[USER_NICKNAME]).emit('fetch-chatlog-callback', snapshot.val())
         //socket.emit('fetch-chatlog-callback', snapshot.val())
       })
       .catch(function(error){
