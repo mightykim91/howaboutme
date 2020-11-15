@@ -34,6 +34,7 @@ class ProfileView(APIView):
 
     def post(self, request):
         data = request.data
+        print(data)
         body_pk = get_object_or_404(Body,name=request.data['body']).id
         data['body'] = body_pk
         job_pk = get_object_or_404(Job, name=request.data['job']).id
@@ -48,7 +49,7 @@ class ProfileView(APIView):
             data['gender'] = 0
         else:
             data['gender'] = 1
-        # print(data)
+
         serializer = ProfileSerializer(data=data)
         if serializer.is_valid(raise_exception=True):
             serializer.save(user=request.user)
@@ -80,6 +81,10 @@ class ProfileView(APIView):
         data['area'] = area_pk
         religion_pk = get_object_or_404(Religion, name=request.data['religion']).id
         data['religion'] = religion_pk
+        if data['gender'] == '여자':
+            data['gender'] = 0
+        else:
+            data['gender'] = 1
         serializer = ProfileSerializer(instance, data=data)
         if serializer.is_valid(raise_exception=True):
             serializer.save()
