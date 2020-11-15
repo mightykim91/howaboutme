@@ -9,7 +9,6 @@ with open(file_path, 'r', encoding='UTF-8-sig') as json_file:
 image_file_path = './dummy_images'
 file_names = os.listdir(image_file_path)
 file_names.sort()
-file_names = file_names[1:]
 print(len(file_names))
 print(file_names)
 for i,name in enumerate(file_names):
