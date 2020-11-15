@@ -166,7 +166,7 @@ io.on('connection', (socket) => {
       console.log(`------FETCHING CHAT LOG OF ${USER_NICKNAME} WITH ${chatInfo.receiver}------`)
       const sender = chatInfo.sender;
       const receiver = chatInfo.receiver;
-      const chatlogRef = database.ref(`/Logs/${sender}/Receiver/${receiver}`)
+      const chatlogRef = database.ref('/Logs/' + sender + '/Receiver/' + receiver)
       chatlogRef.child('messages').once('value').then(function(snapshot) {
         console.log(snapshot.val())
         io.to(socketByNickName[USER_NICKNAME]).emit('fetch-chatlog-callback', snapshot.val())
