@@ -157,7 +157,7 @@ class PreferenceView(APIView):
                 print(obj)
                 tmp.append(obj.id)
         else:
-            tmp.append(data['area'][0])
+            tmp = data['area']
         data['area'] = tmp
         print('---')
         tmp = []
