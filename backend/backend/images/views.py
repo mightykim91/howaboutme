@@ -68,7 +68,11 @@ def imageAnalysis(request):
         face_detector = dlib.get_frontal_face_detector()
         img = cv2.imread(im)
         faces = face_detector(img)
-
+        if len(faces) == 0:
+            msg = {
+                'msg':str(i+1)
+            }
+            return JsonResponse(msg, status=400)
         crop = img[faces[0].top():faces[0].bottom(), faces[0].left():faces[0].right()]
         cv2.imwrite(im, crop)
     image_bytes = []
