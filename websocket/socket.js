@@ -301,7 +301,7 @@ io.on('connection', (socket) => {
           } else {
             const likeLogArray = Object.values(snapshot.val())
             console.log(likeLogArray)
-            io.to(userId[USER_ID]).emit('fetch-like-log-reply', likeLogArray)
+            io.to(socketId[USER_ID]).emit('fetch-like-log-reply', likeLogArray)
             //io.sockets.emit('fetch-like-log-reply', likeLogArray)
             console.log('------FINISHED FETCHING LIKE MESSAGE LOG------')
           }
