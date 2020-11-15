@@ -61,22 +61,27 @@ io.on('connection', (socket) => {
 
     socket.on('initialize-socket', data => {
       console.log(data)
-      const userId = data.userId;
-      const userNickname = data.userNickname
-      console.log('------INITIALIZING SOCKET------')
-      if (userId === undefined || userId === null) {
-        console.log('INITIALIZATION ERROR: missing user id')
+      if (data === undefined || data === null){
+        console.log("DATA IS MISSING")
       }
       else {
-        socketId[userId] = socket.id
-        socketByNickName[userNickname] = socket.id
-        socket.join(userId)
-        const rooms = io.sockets.adapter.rooms
-        if (rooms.has(userId)) {
-          console.log(`CONFIRMED: ${userId} is in ${userId}`)
+        const userId = data.userId;
+        const userNickname = data.userNickname
+        console.log('------INITIALIZING SOCKET------')
+        if (userId === undefined || userId === null) {
+          console.log('INITIALIZATION ERROR: missing user id')
         }
-      }
-      console.log('------INITIALIZING SOCKET FINISHED------')
+        else {
+          socketId[userId] = socket.id
+          socketByNickName[userNickname] = socket.id
+          socket.join(userId)
+          const rooms = io.sockets.adapter.rooms
+          if (rooms.has(userId)) {
+            console.log(`CONFIRMED: ${userId} is in ${userId}`)
+          }
+        }
+        console.log('------INITIALIZING SOCKET FINISHED------')
+    }
     })
     
     //Function for new message
