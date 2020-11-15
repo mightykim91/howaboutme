@@ -90,6 +90,7 @@ class PreferenceView(APIView):
         try:
             instance = get_object_or_404(Preference, user=request.user)
         except:
+            print('except')
             data = {
                 "area": [1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17],
                 "max_age": 50,
@@ -108,66 +109,68 @@ class PreferenceView(APIView):
                 serializer.save(user=request.user)
             instance = get_object_or_404(Preference, user=request.user)
         # try:
-        iter_data = request.data.lists()
+        iter_data = request.data
         data = {}
         many_fields = ['body','education','area','religion','job']
-        for key,val in iter_data:
+        for key,val in iter_data.items():
+            print(key, val)
             if key not in many_fields:
-                data[key] = val[0]
+                data[key] = val
                 continue
             data[key] = val
         print(data)
         
         tmp = []
-        for name in data['body']:
-            if name == "상관 없음":
-                objects = Body.objects.all()
-                for obj in objects:
-                    tmp.append(obj.id)
-                break
-            tmp.append(get_object_or_404(Body, name=name).id)
+        if data['body'] == "상관 없음":
+            objects = Body.objects.all()
+            for obj in objects:
+                tmp.append(obj.id)
+        else:
+            for name in data['body']:
+                tmp.append(get_object_or_404(Body, name=name).id)
         data['body'] = tmp
         print('---')
         tmp = []
-        for name in data['education']:
-            if name == "상관 없음":
-                objects = Education.objects.all()
-                for obj in objects:
-                    tmp.append(obj.id)
-                break
-            print(name)
-            tmp.append(get_object_or_404(Education, name=name).id)
+        if data['education'] == "상관 없음":
+            objects = Education.objects.all()
+            for obj in objects:
+                tmp.append(obj.id)
+        else:
+            for name in data['education']:
+                tmp.append(get_object_or_404(Education, name=name).id)
         data['education'] = tmp
         print('---')
         tmp = []
-        for name in data['job']:
-            if name == "상관 없음":
-                objects = Job.objects.all()
-                for obj in objects:
-                    print(obj)
-                    tmp.append(obj.id)
-                break
-            tmp.append(get_object_or_404(Job, name=name).id)
+        if data['job'] == "상관 없음":
+            objects = Job.objects.all()
+            for obj in objects:
+                print(obj)
+                tmp.append(obj.id)
+        else:
+            for name in data['job']:
+                tmp.append(get_object_or_404(Job, name=name).id)
         data['job'] = tmp
         print('---')
         tmp = []
-        for name in data['area']:
-            if name == "모든 지역":
-                objects = Area.objects.all()
-                for obj in objects:
-                    tmp.append(obj.id)
-                break
-            tmp.append(get_object_or_404(Area, name=name).id)
+        if data['area'] == "모든 지역":
+            objects = Area.objects.all()
+            for obj in objects:
+                print(obj)
+                tmp.append(obj.id)
+        else:
+            for name in data['area']:
+                tmp.append(get_object_or_404(Area, name=name).id)
         data['area'] = tmp
         print('---')
         tmp = []
-        for name in data['religion']:
-            if name == "상관 없음":
-                objects = Religion.objects.all()
-                for obj in objects:
-                    tmp.append(obj.id)
-                break
-            tmp.append(get_object_or_404(Religion, name=name).id)
+        if data['religion'] == "상관 없음":
+            objects = Religion.objects.all()
+            for obj in objects:
+                print(obj)
+                tmp.append(obj.id)
+        else:
+            for name in data['religion']:
+                tmp.append(get_object_or_404(Religion, name=name).id)
         data['religion'] = tmp
 
         print(data)

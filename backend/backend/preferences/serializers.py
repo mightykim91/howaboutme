@@ -18,7 +18,7 @@ class PreferenceResponseSerializer(serializers.ModelSerializer):
 
 class PreferenceSerializer(serializers.ModelSerializer):
     user = UserSerializer(required=False)
-
+    
     class Meta:
         model = Preference
         fields = '__all__'
