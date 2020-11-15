@@ -209,7 +209,7 @@ def get_partners(request):
         # print(profiles)
         profiles = list(profiles)
         while len(profiles) < 5:
-            extra_profiles = list(Profile.objects.all())
+            extra_profiles = list(Profile.objects.filter(Q(gender=gender)&Q(user__in=active_users)))
             random.shuffle(extra_profiles)
             last_profile = extra_profiles[0]
             for p in profiles:
