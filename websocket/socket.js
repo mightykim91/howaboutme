@@ -219,10 +219,10 @@ io.on('connection', (socket) => {
 
     //채팅방 fetcher
     socket.on('fetch-chatroom', user => {
-      console.log('------FETCHING USERS ALL CHAT ROOM------')
-      const chatRoomRef = database.ref(`/Logs/${user}/Receiver`)
+      console.log('------FETCHING USERS ALL CHAT ROOM------' + user)
+      const chatRoomRef = database.ref(`/Logs/${USER_NICKNAME}/Receiver`)
       chatRoomRef.once('value').then(function(snapshot){
-        io.to(socketByNickName[user]).emit('fetch-chatroom-callback', {rooms: snapshot.val()});
+        io.to(socketByNickName[USER_NICKNAME]).emit('fetch-chatroom-callback', {rooms: snapshot.val()});
       })
       .catch(function(error){
         console.log('------ERROR: FETCHING ALL CHAT ROOM ERROR: ' + error);
