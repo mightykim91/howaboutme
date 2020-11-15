@@ -29,7 +29,7 @@ class AreaSerializer(serializers.ModelSerializer):
         fields = '__all__'
 
 class ProfileSerializer(serializers.ModelSerializer):
-    user = UserSerializer(required=False)
+    user = UserSerializer(required=False, read_only=True)
     birth = serializers.DateField(format="%Y-%m-%d")
     
     class Meta:
@@ -42,6 +42,7 @@ class ProfileListSerializer(serializers.ModelSerializer):
     job = JobSerializer()
     area = AreaSerializer()
     education = EducationSerializer()
+    religion = ReligionSerializer()
 
     class Meta:
         model=Profile

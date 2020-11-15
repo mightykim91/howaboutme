@@ -18,8 +18,18 @@ class ProfileView(APIView):
 
     def get(self, request):
         profile = get_object_or_404(Profile, user=request.user)
-        serializer = ProfileListSerializer(profile)
-        return Response(serializer.data)
+        data = ProfileListSerializer(profile).data
+        data['body'] = data['body']['name']
+        data['job'] = data['job']['name']
+        data['education'] = data['education']['name']
+        data['area'] = data['area']['name']
+        data['religion'] = data['religion']['name']
+        if data['gender'] == 0:
+            data['gender'] = '여자'
+        else:
+            data['gender'] = '남자'
+        print(data)
+        return Response(data)
 
 
     def post(self, request):
@@ -45,12 +55,21 @@ class ProfileView(APIView):
             user = request.user
             user.profile_saved = 1
             user.save()
-            return Response(serializer.data)
+            profile = get_object_or_404(Profile, user=request.user)
+            data = ProfileListSerializer(profile).data
+            data['body'] = data['body']['name']
+            data['job'] = data['job']['name']
+            data['education'] = data['education']['name']
+            data['area'] = data['area']['name']
+            data['religion'] = data['religion']['name']
+            print(data)
+            return Response(data)
     
     def put(self,request):
         instance = get_object_or_404(Profile, user=request.user.id)
         # try:    
-        data = request.data.dict()
+        data = request.data
+        print(data)
         body_pk = get_object_or_404(Body,name=request.data['body']).id
         data['body'] = body_pk
         job_pk = get_object_or_404(Job, name=request.data['job']).id

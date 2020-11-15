@@ -56,7 +56,7 @@ def build_graph(hub_module_url, target_image_path):
     return input_byte, similarity
 
 @api_view(['post'])
-@permission_classes([IsAuthenticated])
+# @permission_classes([IsAuthenticated])
 def imageAnalysis(request):
     # try:
     im1 = Image.open(request.FILES['image1'])
