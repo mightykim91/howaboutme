@@ -121,7 +121,7 @@ def get_partners(request):
     # print(like_users)
     preference = Preference.objects.filter(user=request.user)
     all_profiles = Profile.objects.filter(gender=gender)
-    # print(len(preference))
+    print(len(preference))
     active_users = User.objects.filter(image_saved=1)
     if len(preference) == 0 or len(all_profiles) < 5:
         profiles = list(Profile.objects.filter(Q(gender=gender)&Q(user__in=active_users)))
@@ -221,7 +221,7 @@ def get_partners(request):
         random.shuffle(profiles)
         data = []
         for profile in profiles:
-            serializer = ProfileSerializer(profile)
+            serializer = ProfileSerializer(profile).data
             # print(dir(serializer))
             flag = False
             for like_id in like_users:
