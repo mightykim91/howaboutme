@@ -87,8 +87,26 @@ class PreferenceView(APIView):
         #     return JsonResponse(msg, status=500)
 
     def put(self,request):
-        instance = get_object_or_404(Preference, user=request.user)
-
+        try:
+            instance = get_object_or_404(Preference, user=request.user)
+        except:
+            data = {
+                "area": "모든 지역",
+                "max_age": 50,
+                "min_age": 20,
+                "max_height": 200,
+                "min_height": 140,
+                "body": "상관 없음",
+                "education": "상관 없음",
+                "job": "상관 없음",
+                "religion": "상관 없음",
+                "drink": "상관 없음",
+                "smoke": "상관 없음",
+            }
+            serializer = PreferenceSerializer(data)
+            if serializer.is_valid(raise_exception=True):
+                serializer.save(user=request.user)
+            instance = get_object_or_404(Preference, user=request.user)
         # try:
         iter_data = request.data.lists()
         data = {}
