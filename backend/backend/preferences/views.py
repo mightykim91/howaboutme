@@ -21,7 +21,7 @@ class PreferenceView(APIView):
                 data[key] = val[0]
                 continue
             data[key] = val
-        # print(data)
+        print(data)
         
         tmp = []
         for name in data['body']:
@@ -32,7 +32,7 @@ class PreferenceView(APIView):
                 break
             tmp.append(get_object_or_404(Body, name=name).id)
         data['body'] = tmp
-        # print('---')
+        print('---')
         tmp = []
         for name in data['education']:
             if name == "상관 없음":
@@ -43,7 +43,7 @@ class PreferenceView(APIView):
             print(name)
             tmp.append(get_object_or_404(Education, name=name).id)
         data['education'] = tmp
-        # print('---')
+        print('---')
         tmp = []
         for name in data['job']:
             if name == "상관 없음":
@@ -54,7 +54,7 @@ class PreferenceView(APIView):
                 break
             tmp.append(get_object_or_404(Job, name=name).id)
         data['job'] = tmp
-        # print('---')
+        print('---')
         tmp = []
         for name in data['area']:
             if name == "모든 지역":
@@ -64,7 +64,7 @@ class PreferenceView(APIView):
                 break
             tmp.append(get_object_or_404(Area, name=name).id)
         data['area'] = tmp
-        # print('---')
+        print('---')
         tmp = []
         for name in data['religion']:
             if name == "상관 없음":
@@ -75,7 +75,7 @@ class PreferenceView(APIView):
             tmp.append(get_object_or_404(Religion, name=name).id)
         data['religion'] = tmp
 
-        # print(data)
+        print(data)
         serializer = PreferenceSerializer(data=data)
         if serializer.is_valid(raise_exception=True):
             serializer.save(user = request.user)
