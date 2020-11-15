@@ -152,6 +152,7 @@ class PreferenceView(APIView):
         print('---')
         tmp = []
         if len(data['area'][0]) != 1:
+            print('array')
             area = data['area'][0]
             if area == "모든 지역":
                 objects = Area.objects.all()
@@ -161,13 +162,14 @@ class PreferenceView(APIView):
             else:
                 tmp.append(area)
         else:
+            print('string')
             if data['area'] == "모든 지역":
                 objects = Area.objects.all()
                 for obj in objects:
                     print(obj)
                     tmp.append(obj.id)
             else:
-                tmp.append(data['area'])
+                tmp.append(get_object_or_404(Area, name=data['area']).id)
         data['area'] = tmp
         print('---')
         tmp = []
