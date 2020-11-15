@@ -60,14 +60,14 @@ io.on('connection', (socket) => {
     })
 
     socket.on('initialize-socket', data => {
+      console.log(data)
+      const userId = data.userId;
+      const userNickname = data.userNickname
       console.log('------INITIALIZING SOCKET------')
       if (userId === undefined || userId === null) {
         console.log('INITIALIZATION ERROR: missing user id')
       }
       else {
-        console.log(data)
-        const userId = data.userId;
-        const userNickname = data.userNickname
         socketId[userId] = socket.id
         socketByNickName[userNickname] = socket.id
         socket.join(userId)
