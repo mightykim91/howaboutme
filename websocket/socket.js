@@ -290,17 +290,18 @@ io.on('connection', (socket) => {
 
     //좋아요 메세지 로그 호출 함수
     socket.on('fetch-like-log', data => {
-      console.log(`------FETCHING LIKE MESSAGE LOG: ${data.user}------`)
+      console.log(`------FETCHING LIKE MESSAGE LOG: ${USER_ID}------`)
       const user = data.user;
       //const user = 'suzi';
       if (user) {
-        const logRef = database.ref(`Logs/${user}/likeLog`)
+        const logRef = database.ref(`Logs/${USER_ID}/likeLog`)
         logRef.once('value').then(function(snapshot) {
           if (snapshot.val() === null || snapshot.val() === undefined){
             console.log(`------NO DATA------`)
           } else {
             const likeLogArray = Object.values(snapshot.val())
-            io.to(userId[user]).emit('fetch-like-log-reply', likeLogArray)
+            console.log(likeLogArray)
+            io.to(userId[USER_ID]).emit('fetch-like-log-reply', likeLogArray)
             //io.sockets.emit('fetch-like-log-reply', likeLogArray)
             console.log('------FINISHED FETCHING LIKE MESSAGE LOG------')
           }
