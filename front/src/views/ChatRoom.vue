@@ -14,7 +14,7 @@
           {{ $route.params.partner }}
         </div>
         <div class='chat-feature'>
-          <i class="fas fa-video" @click="activateVideoCall"></i>
+          <i class="fas fa-video" @click="activeVideoCall=true"></i>
         </div>
       </div>
       <div id="app_chat_list" class='chat-content'>
@@ -41,30 +41,27 @@
     </div>
   </div>
   <div v-else-if="incomingCall == true">
-    <VideoChat 
-    v-bind:incomingCall="true"
-    v-bind:caller="myPartner" 
-    v-bind:callee="user"
-    v-bind:callerSignal='callerSignal'
-    v-bind:isInitiator="isInitiator"
-    v-on:endcall="endCall"/>
+    <video playsInline muted id="my-video" autoPlay></video>
+    <button v-if="callAccepted == false" @click="acceptCall">Accept Call</button>
+    <video playsInline id="partner-video" autoPlay></video>
   </div>
   <div v-else-if="activeVideoCall == true">
-    <VideoChat
-    v-bind:incomingCall="false" 
-    v-bind:caller="user" 
-    v-bind:callee="myPartner"
-    v-bind:isInitiator="isInitiator" 
-    v-on:endcall="endCall"/>
+    <p v-for="user in users" v-bind:key="user.id" @click='callPeer(user)'>
+        {{user}}
+    </p>
+    <video playsInline muted id="my-video" autoPlay></video>
+    <video playsInline id="partner-video" autoPlay></video>
+    <div v-if="users">
+    </div>
+    <button @click='endCall'>Exit</button>
   </div>
 </template>
 
 <script>
 import ChatBubble from "../components/message/ChatBubble"
 import ChatInput from "../components/message/ChatInput"
-import VideoChat from "../components/message/VideoChat"
 import Title from "../components/common/Title"
-
+import Peer from "simple-peer"
 export default {
   props: {
     partner: String,
@@ -84,13 +81,16 @@ export default {
       from: false,
       callerSignal: '',
       refreshSignal: false,
+      stream: '',
+      mySocketId: this.$socket.id,
+      users: '',
+      callAccepted:'',
     }
   },
   components: {
     ChatBubble,
     ChatInput,
     Title,
-    VideoChat,
   },
   methods: {
     // getChat: function(chatlog){
@@ -110,13 +110,97 @@ export default {
         this.refreshSignal = false;
       })
     },
-    activateVideoCall: function(){
-      this.activeVideoCall = true;
+    getStream: (stream) => {
+      this.stream = stream
     },
     endCall: function(){
       this.activeVideoCall = false;
       this.incomingCall = false;
-    }
+      this.stream.getTracks().forEach(function(track){
+        track.stop()
+      });
+    },
+    callPeer: function(receiver){
+      this.activeVideoCall = true
+      navigator.mediaDevices.getUserMedia({audio: false, video: true}).then(stream => {
+            this.stream = stream;
+            const myvideo = document.querySelector('#my-video')
+            if (myvideo) {
+              myvideo.srcObject = this.stream
+            }
+        })
+      console.log('Apply for calling')
+      const myPeer = new Peer({
+          initiator: true,
+          trickle: false,
+          config: {
+              iceServers: [
+              {
+                  urls: "stun:numb.viagenie.ca",
+                  username: "sultan1640@gmail.com",
+                  credential: "98376683"
+              },
+              {
+                  urls: "turn:numb.viagenie.ca",
+                  username: "sultan1640@gmail.com",
+                  credential: "98376683"
+              }
+              ]
+          }, 
+          stream: this.stream
+      });
+      myPeer.on('signal', data => {
+          console.log('피어 시그널 시작!')
+          const callInfo = {
+              caller: this.$socket.id,
+              callee: receiver,
+              signalData: data
+          }
+          this.$socket.emit('callUser', callInfo);
+      })
+
+      myPeer.on('stream', stream => {
+          console.log('스트림수신')
+          const partnerVideo = document.querySelector('#partner-video');
+          console.log('partner-video-stream')
+          console.log(stream)
+          if (partnerVideo) {
+              partnerVideo.srcObject = stream;
+          }
+      })
+
+      this.$socket.on('callAccepted', signal => {
+          console.log('전화연결됨')
+          if (myPeer) {
+              console.log(myPeer)
+          }
+          this.callAccepted = true;
+          myPeer.signal(signal);
+      })
+    },
+    acceptCall: function(){
+            console.log('answering phone call')
+            this.callAccepted = true;
+            const myPeer = new Peer({
+                initiator: false,
+                trickle: false,
+                stream: this.stream,
+            })
+
+            myPeer.on("signal", data => {
+                console.log('accepting call....')
+                this.$socket.emit("acceptCall", {signalData: data, caller: this.from}, () => {
+                    console.log('acceptCall Event fired!')
+                })
+            })
+
+            myPeer.on('stream', stream => {
+                const partnerVideo = document.querySelector('#partner-video');
+                partnerVideo.srcObject = stream
+            })
+
+            myPeer.signal(this.callerSignal);
+        },
   },
   watch: {
     refreshSignal : function(){
@@ -151,8 +235,13 @@ export default {
       //Emit event to receieve chat log
       this.$socket.emit('fetch-chatlog', chatInfo);
       this.$socket.on('fetch-chatlog-callback', chatlog => {
-        console.log('got fetched data')
-        this.chatlog = Object.values(chatlog)
+        if (chatlog === null || chatlog === undefined){
+          console.log('****There is no chats to display****' + new Date())
+          this.chatlog = []
+        } else {
+          console.log('****Fetching chat log completed****' + new Date())
+          this.chatlog = Object.values(chatlog)
+        }
       })
 
       //Emit event to receive unread message count <= use it when user is not in chat room to alert unread message
@@ -162,7 +251,7 @@ export default {
       })
       
       this.$socket.on('new-message-fin', (newMessage) => {
-        console.log('새로운메세지')
+        console.log('****새로운 메세지를 수신했습니다.****')
         const newChatlog = this.chatlog
         //새로 대화하는 경우 chatlog
         if (!newChatlog) {
@@ -178,11 +267,18 @@ export default {
       
       //incoming call
       this.$socket.on('incoming-call', data => {
+            console.log('*****전화가 왔습니다*****')
             this.incomingCall = true
-            this.isInitiator = false
             this.from = data.from
             this.callerSignal = data.signalData
         })
+      this.$socket.on('get-socket-id', id => {
+          this.mySocketId = id;
+          console.log(this.$socket.id)
+      })
+      this.$socket.on('allUsers', users => {
+        this.users = users
+      })
   }
 }
 </script>

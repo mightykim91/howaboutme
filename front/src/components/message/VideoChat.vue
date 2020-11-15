@@ -6,7 +6,9 @@
         <button @click='exit'>Exit</button>
     </div>
     <div v-else-if="incomingCall == true">
+        <video playsInline muted id="my-video" autoPlay></video>
         <button v-if="callAccepted == false" @click="acceptCall">Accept Call</button>
+        <video v-else playsInline id="partner-video" autoPlay></video>
         <!-- <div v-else>
             <video playsInline muted id="my-video" autoPlay></video>
             <video v-if="callAccepted == true" playsInline id="partner-video" autoPlay></video>
@@ -28,6 +30,7 @@ export default {
     },
     data(){
         return {
+            mySocketId: this.$socket.id,
             stream: '',
             calling: false, 
             callAccepted: false,
@@ -49,18 +52,18 @@ export default {
                 initiator: true,
                 trickle: false,
                 config: {
-                    // iceServers: [
-                    // {
-                    //     urls: "stun:numb.viagenie.ca",
-                    //     username: "sultan1640@gmail.com",
-                    //     credential: "98376683"
-                    // },
-                    // {
-                    //     urls: "turn:numb.viagenie.ca",
-                    //     username: "sultan1640@gmail.com",
-                    //     credential: "98376683"
-                    // }
-                    // ]
+                    iceServers: [
+                    {
+                        urls: "stun:numb.viagenie.ca",
+                        username: "sultan1640@gmail.com",
+                        credential: "98376683"
+                    },
+                    {
+                        urls: "turn:numb.viagenie.ca",
+                        username: "sultan1640@gmail.com",
+                        credential: "98376683"
+                    }
+                    ]
                 }, 
                 stream: this.stream
             });
@@ -127,10 +130,15 @@ export default {
         
     },
     mounted: function(){
+        //내 영상 가져오기
         navigator.mediaDevices.getUserMedia({audio: false, video: true}).then(stream => {
+            this.$emit('Stream', stream)
             this.setStream(stream);
         })
-
+        this.$socket.on('get-socket-id', id => {
+            this.mySocketId = id;
+            console.log(this.$socket.id)
+        })
         if (this.isInitiator) {
             console.log(`${this.caller}가 ${this.callee}에게 화상통화 연결을 요청합니다.`)
             this.calling = true
@@ -140,6 +148,12 @@ export default {
 }
 </script>
 
-<style>
+<style scoped>
 
+video
+{
+    transform: rotateY(180deg);
+    -webkit-transform:rotateY(180deg); /* Safari and Chrome */
+    -moz-transform:rotateY(180deg); /* Firefox */
+}
 </style>

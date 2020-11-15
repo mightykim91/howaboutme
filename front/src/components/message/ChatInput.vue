@@ -32,7 +32,8 @@ export default {
   data() {
     return {
       chat_text: "",
-      myId: this.userId,
+      //myId: this.userId,
+      myId: 'Nam',
       myPartner: this.partner
     }
   },

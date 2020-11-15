@@ -1,7 +1,7 @@
 <template>
   <div class="container-notificationBox">
       <!-- <Notification v-for="user in users" :key="user.i" :user="user" /> -->
-      <Notification v-for="msg in newMessages" :key="msg.key" :msg="msg" @clickProfile="onClickProfile" />
+      <Notification v-for="msg in likeMessages" :key="msg.key" :msg="msg" @clickProfile="onClickProfile" />
       <v-dialog v-model="showProfile">
         <ProfileModal @closeModal="showProfile=false" :userData="user" />
       </v-dialog>
@@ -132,7 +132,8 @@ export default {
               area: '경기도',
               intro: 'HELLO',
             },
-          ]
+          ],
+          likeMessages: [],
         }
     },
     methods: {
@@ -146,7 +147,7 @@ export default {
       this.$socket.on('fetch-like-log-reply', likeMessages => {
         const newMsg = Object.values(likeMessages);
         //key가 보낸사람 아이디, value가 메세지 내용
-        this.newMessages = newMsg;
+        this.likeMessages = newMsg;
       })
     }
 }
