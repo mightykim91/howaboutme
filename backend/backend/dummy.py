@@ -154,17 +154,18 @@ for i in range(1,101):
     print(i)
     data.append(user)
     data.append(profile)
+print(len(nicks))
 with open(file_path, 'w', encoding='UTF-8') as outfile:
     json.dump(data, outfile, indent=4, ensure_ascii=False)
 
-# with open('./nicks.json','w', encoding='UTF-8-sig') as filewrite:
-#     json.dump(nicks, filewrite, indent=4, ensure_ascii=False)
+with open('./nicks.json','w', encoding='UTF-8-sig') as filewrite:
+    json.dump(nicks, filewrite, indent=4, ensure_ascii=False)
 
-image_file_path = './dummy_images'
-file_names = os.listdir(image_file_path)
+# image_file_path = './dummy_images'
+# file_names = os.listdir(image_file_path)
 
-for i,name in enumerate(file_names):
-    src = os.path.join(image_file_path,name)
-    dst = nicks[i]
-    dst = os.path.join(image_file_path,dst)
-    os.rename(src,dst)
+# for i,name in enumerate(file_names):
+#     src = os.path.join(image_file_path,name)
+#     dst = nicks[i]
+#     dst = os.path.join(image_file_path,dst)
+#     os.rename(src,dst)
