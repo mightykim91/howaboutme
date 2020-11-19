@@ -1,0 +1,28 @@
+.container-btns {
+  // background-color: rgb(0, 0, 0, 0.7);
+  .wrapper-btn {
+    display: inline-block;
+  }
+  .wrapper-left {
+    // border-left: 1px solid rgb(211, 211, 211);
+    border-radius: 6px 0 0 6px;
+  }
+  .wrapper-right {
+    border-radius: 0 6px 6px 0;
+  }
+  .btn {
+    padding: 6px 7px;
+    background-color: white;
+    outline: none;
+    border-right: 1.8px solid rgb(250, 237, 237);
+    font-size: 0.9rem;
+    color: rgb(119, 116, 139);
+  }
+  .btn-left {
+    border-left: 1px solid white;
+    border-radius: 6px 0 0 6px;
+  }
+  .btn-right {
+    border-radius: 0 6px 6px 0;
+  }
+}

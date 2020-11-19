@@ -1,0 +1,72 @@
+.info-btn {
+  width: 80%;
+  // margin: 10px auto;
+}
+.card-info {
+  font-size: 12px;
+  font-weight: 900;
+  // text-align: left;
+  // margin: 0 20px 0 20px;
+  color: #c1c1c1;
+}
+.btn-disabled {
+  pointer-events: none;
+  cursor: none;
+}
+
+.submit-btn {
+  margin: 0px auto;
+  width: 80%;
+}
+
+.info-key {
+  color: #cacaca;
+  position: absolute;
+  left: 0px;
+  margin: 0 10px;
+}
+
+.info-value {
+  color: #333333;
+  position: absolute;
+  right: 0px;
+  margin: 0 10px;
+  font-weight: 900;
+}
+
+.info-value-half {
+  width: 55px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+.info-value-intro {
+  width: 150px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.btn {
+  width: 200px;
+  height: 40px;
+  margin: 4px;
+  border-radius: 5px;
+  background-color: #f5d7d5;
+}
+
+.btn-male {
+  width: 200px;
+  height: 40px;
+  margin: 4px;
+  border-radius: 5px;
+  background-color: #c8e3e7;
+}
+
+// .swal2-show {
+//   width: 300px;
+//   height: 200px;
+// }
+/* .v-menu__content.theme--light.v-menu__content--fixed.menuable__content__active {
+  width: 200px;
+} */

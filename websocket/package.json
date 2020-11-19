@@ -1,0 +1,20 @@
+{
+  "name": "webrtc",
+  "version": "1.0.0",
+  "description": "Face chat program",
+  "main": "socket.js",
+  "scripts": {
+    "serve": "nodemon socket.js"
+  },
+  "author": "Yeonsu Kim",
+  "license": "ISC",
+  "dependencies": {
+    "cors": "^2.8.5",
+    "ejs": "^3.1.5",
+    "express": "^4.17.1",
+    "firebase": "^8.0.0",
+    "nodemon": "^2.0.6",
+    "socket.io": "^3.0.1",
+    "uuid": "^8.3.1"
+  }
+}

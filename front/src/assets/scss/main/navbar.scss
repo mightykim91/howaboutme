@@ -1,0 +1,51 @@
+.navbar {
+  .container-navbar {
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    height: 10vh;
+    background-color: white;
+    box-shadow: inset;
+    display: flex;
+    align-items: center;
+    justify-content: space-around;
+    border-radius: 24px 24px 0 0;
+    box-shadow: 0px -5px 100px rgb(211, 211, 211);
+  }
+  .navbar-item {
+    .navbar-btn {
+      display: flex;
+      align-items: center;
+      outline: none;
+    }
+  }
+  .unread-meesage {
+    position: absolute;
+    display: flex;
+    padding: 4px;
+    justify-content: center;
+    align-items: center;
+    top: 0.8rem;
+    border-radius: 45% 45%;
+    background-color: red;
+    font-size: 0.7rem;
+    color: white;
+    min-width: 1.2rem;
+    height: 1.2rem;
+    margin-left: 1.6rem;
+  }
+  .navbar-heart {
+    position: absolute;
+    display: flex;
+    padding: 4px;
+    justify-content: center;
+    align-items: center;
+    top: 0.8rem;
+    font-size: 0.5rem;
+    color: red;
+    min-width: 1.2rem;
+    height: 1.2rem;
+    margin-left: 1.5rem;
+  }
+}

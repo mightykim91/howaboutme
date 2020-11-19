@@ -1,0 +1,17 @@
+.container-btns {
+  display: flex;
+  flex-direction: column;
+  .wrapper-btn {
+    display: flex;
+    justify-content: center;
+    .btn {
+      border-radius: 25px;
+      font-size: 0.9rem;
+      margin: 0 3px;
+      padding: 6px 9px;
+      outline: none;
+      background-color: white;
+      color: rgb(119, 116, 139);
+    }
+  }
+}

@@ -1,0 +1,106 @@
+.container-controls {
+  z-index: 99999;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  display: flex;
+}
+
+.background-controls {
+  position: fixed;
+  width: 100vw;
+  height: 100vh;
+  background-color: rgba(0, 0, 0, 0.4);
+  z-index: 10;
+}
+
+.modal-controls {
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+  top: 0;
+  width: 100vw;
+  border-radius: 0 0 30px 30px;
+  background-color: white;
+  padding: 12px 12px;
+  z-index: 10;
+}
+
+.modal-deco-top {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 3vh;
+  background-color: #fca69d9a;
+  z-index: -1;
+}
+
+.modal-header {
+  height: 50px;
+  width: 100%;
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  // position: sticky;
+  .header-title {
+    font-size: 19px;
+    font-weight: 1000;
+    color: #fca69d;
+    line-height: 50px;
+  }
+  .btn-confirm {
+    img {
+      width: 30px;
+      height: 30px;
+    }
+  }
+}
+
+.modal-body {
+  display: flex;
+  flex-direction: column;
+  margin-top: 24px;
+  .control-item {
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start;
+    margin-bottom: 24px;
+    background-color: rgb(250, 237, 237);
+    border-radius: 12px;
+    padding: 12px;
+    .control-title {
+      text-align: left;
+      color: #4c4c4c;
+      margin-bottom: 6px !important;
+      margin-left: 5% !important;
+    }
+  }
+  .items-padding {
+    padding: 0 7%;
+  }
+}
+
+/* 모달 푸터 */
+.modal-footer {
+  .container-btns {
+  }
+  padding: inherit;
+  bottom: 0;
+  left: 0;
+  width: 100%;
+  display: flex;
+  justify-content: space-between;
+  .btn-detail {
+    color: #966b6b;
+    color: #919191;
+    outline: none;
+  }
+  .btn-close {
+    color: #fca69d;
+  }
+}
+
+.hide {
+  display: none;
+}

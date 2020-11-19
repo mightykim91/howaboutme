@@ -1,0 +1,19 @@
+.select {
+  width: 100%;
+  padding: 0 50px; /* 여백으로 높이 설정 */
+  font-size: 18px;
+  // border-bottom: 2px solid white;
+  color: #272727;
+  outline: none;
+  text-align: center;
+  // height: 130px;
+  height: 45px;
+  font-family: inherit; /* 폰트 상속 */
+  background-size: 22px;
+  border: 1px solid rgb(211, 211, 211);
+  border-radius: 6px; /* iOS 둥근모서리 제거 */
+  -webkit-appearance: none; /* 네이티브 외형 감추기 */
+  -moz-appearance: none;
+  appearance: none;
+  outline: none;
+}
