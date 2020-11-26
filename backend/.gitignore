@@ -4,6 +4,7 @@ venv
 # Edit at https://www.toptal.com/developers/gitignore?templates=visualstudiocode,django,vuejs,pycharm,intellij,eclipse
 
 ### Django ###
+backendSecrets.json
 *.log
 *.pot
 *.pyc

@@ -12,6 +12,12 @@ https://docs.djangoproject.com/en/3.1/ref/settings/
 
 from pathlib import Path
 import datetime
+import json
+
+# Load credential infromation for database settings
+with open('api/backendSecrets.json', 'r') as f:
+    credentials = json.load(f)
+
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
 
@@ -28,8 +34,8 @@ DEBUG = True
 # Production Level
 #DEBUG = False
 
-# ALLOWED_HOSTS = ["*"]
-ALLOWED_HOSTS = ["k3a507.p.ssafy.io"]
+ALLOWED_HOSTS = ["*"]
+#ALLOWED_HOSTS = ["k3a507.p.ssafy.io"]
 
 AUTHENTICATION_BACKENDS = [
     # Needed to login by username in Django admin, regardless of `allauth`
@@ -133,17 +139,15 @@ WSGI_APPLICATION = 'api.wsgi.application'
 
 DATABASES = {
     'default': {
+        # DEFAULT sqlite 
         # 'ENGINE': 'django.db.backends.sqlite3',
         # 'NAME': BASE_DIR / 'db.sqlite3',
-
-        'ENGINE': 'django.db.backends.mysql',
-        'NAME': 'howaboutme',
-        'USER': 'root',
-        # 'PASSWORD': 'tjfflsk159',
-        # 'HOST': '127.0.0.1',
-        'PASSWORD': 'howaboutme507',
-        'HOST': '172.17.0.1',
-        'PORT': '3306'
+        'ENGINE': 'django.db.backends.mysql', #Type your database engine here
+        'NAME': credentials['NAME'],
+        'USER': credentials['USER'],
+        'PASSWORD': credentials['PASSWORD'],
+        'HOST': credentials['HOST'],
+        'PORT': credentials['PORT'],
     }
 }
 
