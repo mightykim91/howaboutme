@@ -1,9 +1,9 @@
 # 나는 어때(How About Me)
 
-<div style="text-align: center;">
-  <img style="max-height:90%; max-width:90%;"
+<p align="center">
+  <img
   src="./readme_src/readme_main.png">
- </div>
+ </p>
 
 **나는 어때**는 기존의 소개팅 애플리케이션들에서 가짜 프로필 사진이나 실물과 전혀 다른 프로필 사진으로 겪었던 불편함을 해소해줄 새로운 소개팅 애플리케이션입니다. 저희 서비스는 실제 사용자의 실물과 사용자가 업로드한 프로필 사진의 유사도를 측청하고 해당 유사도를 모든 사용자들에게 제공함으로써 앞서 말했던 불편함을 해소해주고 더욱 더 신뢰있는 소개팅 서비스를 제공하고 있습니다. 나는 어때와 함께 눈속임 없는 소개팅을 경험해보세요!
 
@@ -19,17 +19,24 @@
 
 저희 서비스를 이용하기 위해서는 필수적으로 회원가입/로그인을 해야합니다. 새로운 유저의 경우 회원가입 단계에서 자신의 상세 프로필을 기입합니다. 
 
-<img src="./readme_src/howaboutme-signup.gif" alt="회원가입" style="zoom:67%;" />
+<p align="center">
+  <img style="zoom:67%"
+  src="./readme_src/howaboutme-signup.gif">
+ </p>
 
 ### 1-2. 유사도 측정
 
 유사도 측정은 회원가입 과정에서 상세 프로필 기입이 완료된 후 진행됩니다. 먼저 자신의 프로필 사진을 업로드한 뒤 자신의 실물 사진을 스마트폰 카메라를 통해 촬영한 후 유사도 측정이 이루어집니다.
 
-<img src="./readme_src/howaboutme-similarity1.gif" alt="프로필사진업로드" style="zoom:67%;" />
+<p align="center">
+  <img style="zoom:67%"
+  src="./readme_src/howaboutme-similarity1.gif">
+ </p>
 
-
-
-<img src="./readme_src/howaboutme-similarity2.gif" alt="유사도 측정2" style="zoom:67%;" />
+<p align="center">
+  <img style="zoom:67%"
+  src="./readme_src/howaboutme-similarity2.gif">
+ </p>
 
 
 
@@ -37,13 +44,21 @@
 
 **나는 어때**의 메인페이지에서 소개팅 상대를 확인 할 수 있습니다. 좌우 스크롤을 통해 새로운 상대방을 볼 수 있습니다. 현재 페이지에 나타난 상대방을 다 본후에는 다른 매칭 상대 보기를 클릭하여 새로운 상대들을 볼 수 있습니다. 상대방 프로필 사진 하단 가운데 위치한 숫자는 상대방의 실물과 대표 사진과의 유사도를 측정한 수치입니다. 이를 통해 프로필 사진과 실물이 비슷한 유저를 파악할 수 있습니다.
 
-![상대방찾기](./readme_src/howaboutme-main.gif)
+<p align="center">
+  <img
+  src="./readme_src/howaboutme-main.gif">
+ </p>
+
+
 
 ### 1-4. 상대방 프로필 확인
 
 상대방 프로필을 보려면 메인페이지에 나타난 상대방 사진의 왼쪽에 있는 하늘색 버튼을 클릭합니다. 해당 버튼을 클릭하게 되면 상대방의 자세한 프로필이 나타나고 사진 밑에 있는 화살표를 클릭하면 원본 크기의 프로필 사진을 볼 수 있습니다.
 
-![프로필](./readme_src/howaboutme-profile-detail.gif)
+<p align="center">
+  <img 
+  src="./readme_src/howaboutme-profile-detail.gif">
+ </p>
 
 
 
@@ -53,17 +68,30 @@
 
 - 상대방에게 하트 누르기
 
-  ![하트전송](./readme_src/howaboutme-likebutton.gif)
+  <p align="center">
+    <img 
+    src="./readme_src/howaboutme-likebutton.gif">
+   </p>
+
+  
 
 - 좋아요 메세지 확인하고 대화하기
 
-  ![대화시작](./readme_src/howaboutme-startchat.gif)
+  <p align="center">
+    <img 
+    src="./readme_src/howaboutme-startchat.gif">
+   </p>
+
+  
 
 - 실시간 대화 장면
 
-  <img src="./readme_src/howaboutme-realtimechat.gif" alt="실시간대화" style="zoom:67%;" />
-
-
+  <p align="center">
+    <img style="zoom:67%;"
+    src="./readme_src/howaboutme-realtimechat.gif">
+   </p>
+  
+  
 
 
 
