@@ -185,38 +185,84 @@ npm run serve
 - 웹소켓 서버 데이터 베이스 설정
 - 프론트엔드
   - 백엔드 서버 주소 설정
+  
   - 웹소켓 서버 주소 설정
+  
+    
 
 ## 1. 백엔드 서버 데이터 베이스 설정
 
-백엔드 서버와 통신할 데이터 베이스 설정이 필요하며 관계형 데이터 베이스가 필요합니다. 백엔드 서버 데이터 베이스 설정을 위해 `backend/backend/api/setting.py` 를 열어 다음의 부분을 수정해주세요.
+백엔드 서버와 통신할 데이터 베이스 설정이 필요하며 관계형 데이터 베이스가 필요합니다. 백엔드 서버 데이터 베이스 설정을 위해 `backend/backend/api` 디렉토리에 `backendSecrets.json` 을 생성하고 다음과 같이 작성해주세요.
 
-```python
-#settings.py
-DATABASES = {
-    'default': {
-      	# 기본 Django 데이터 베이스 사용을 원할시
-      	# 다음 2줄을 comment out 해주세요.
-        # 'ENGINE': 'django.db.backends.sqlite3',
-        # 'NAME': BASE_DIR / 'db.sqlite3',
-				
-      	# 커스텀 데이터베이스를 이용할 경우 다음 항목들을 작성해주세요.
-        'ENGINE': 'django.db.backends.{your database}', #mysql 사용시 django.db.backends.mysql
-        'NAME': '', #데이터베이스 이름
-        'USER': '', #데이터베이스 사용자 이름
-        'PASSWORD': '', #데이터베이스 비밀번호
-        'HOST': '', #데이터베이스 주소
-        'PORT': '', #데이터베이스 포트 번호
-    }
+```JSON
+//backendSecrets.json
+{
+    "SECRET_KEY": "장고 프로젝트 SECRET_KEY",
+    "NAME": "데이터베이스 이름",
+    "USER": "데이터베이스 접근 유저",
+    "PASSWORD": "데이터베이스 접근 비밀번호",
+    "HOST": "데이터베이스 도메인 주소",
+    "PORT": "데이터베이스 포트 번호"
 }
 
 ```
 
 
 
+## 2. 웹소켓 서버 데이터 베이스 설정
+
+**나는 어때**의 웹소켓 서버는 메신저 로그를 저장하기 위해 Firebase의 real-time database를 사용합니다. 
+
+웹소켓 서버의 데이터 베이스 설정을 위해 `/websocket` 디렉토리에 `websocketSecrets.json` 파일을 생성하고 다음과 같이 작성해주세요.
+
+```JSON
+//websocketSecrets.json
+{
+    "firebaseConfig": {
+        "apiKey": "Firebase에서 제공하는 API KEY를 작성해주세요.",
+        "authDomain": "Firebase에서 제공하는 authDomain을 작성해주세요",
+        "databaseURL": "Firebase에서 제공하는 databaseURL을 작성해주세요",
+        "projectId": "Firebase에서 제공하는 projectID를 작성해주세요",
+        "storageBucket": "Firebase에서 제공하는 storageBucket을 작성해주세요",
+        "messagingSenderId": "Firebase에서 제공하는 messsagingSenderId를 작성해주세요",
+        "appId": "Firebase에서 제공하는 appId를 작성해주세요",
+        "measurementId": "Firebase에서 제공하는 measurementId를 작성해주세요"
+    }
+}
+```
 
 
 
+## 3. 프론트엔드에서의 백엔드, 웹소켓 서버 설정
+
+프론트엔드가 백엔드와 웹소켓 서버와 통신하기 위해서는 각 서버가 실행되고 있는 위치를 설정해주어야합니다. 
+
+백엔드 서버와의 연결 설정은 `~/front/src/api` 디렉토리 내의 위치한 `UserAPI.js` 파일 내의 `BASE_URL` 변수를 통해 이루어집니다. `UserAPI.js` 파일은 다음과 같습니다.
+
+```Javascript
+//~/front/src/api/UserApi.js
+export default {
+  FRONT_BASE_URL: "프론트엔드 주소",
+  BASE_URL: "백엔드 서버 주소",
+  ROUTES: {
+    USER: {},
+  },
+};
+```
+
+`BASE_URL`의 변수를 이용하고 있는 백엔드 서버의 주소로 바꾸어 주세요. 그리고 `FRONT_BASE_URL` 또한 현재 프론트엔드가 배포된 주소로 변경해주세요.
+
+웹소켓 서버의 경우 더 간단합니다. `~/front/src` 디렉토리에 위치한 `main.js` 파일에서 `socket` 변수를 찾아 주세요. `main.js` 에서의 `socket` 변수는 다음과 같이 작성되어 있습니다.
+
+```javascript
+//main.js
+...
+const socket = io('웹소켓 서버가 실행중인 주소를 작성해주세요.', {secure:true}); 
+//ex) const socket = io('https://websocket.com:3000', {secure:true});
+...
+```
+
+위와 같이 웹소켓 서버가 실행중인 주소를 입력하면 됩니다. 그리고 만약 웹소켓 서버가 HTTP 환경에서 작동하고 있다면 `{secure: true}` 부분은 제거하여 `io('http://websocket.com:3000')` 과 같이 작성하면 됩니다.
 
 
 

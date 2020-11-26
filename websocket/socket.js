@@ -4,6 +4,7 @@ const express = require('express');
 const app = express();
 const cors = require('cors');
 const {v4:uuidv4} = require('uuid');
+const fs = require('fs')
 
 
 app.set('view engine', 'ejs');
@@ -11,33 +12,22 @@ app.set('view engine', 'ejs');
 const server = require('http').Server(app);
 const io = require('socket.io')(server, {
   cors: {
-    // origin: 'http://k3a507.p.ssafy.io',
     origin: true,
     methods: ['GET', 'POST']
   }
 });
-//TEST
-//server.listen(8000);
 
 //DEPLOY
 server.listen(3000);
 
 app.get('/', function(req, res) {
- res.json({message: "welcome to websocket for ssafy 507"})
+ res.json({message: "welcome to websocket server"})
 })
 //firebase settings
+const firebaseSettings = JSON.parse(fs.readFileSync('./websocketSecrets.json'));
 const firebase = require('firebase');
 const { triggerAsyncId } = require('async_hooks');
-const firebaseConfig = {
-    apiKey: "AIzaSyD9WPO1cEjEfezvW2pkT40ePYLfCk_PDVU",
-    authDomain: "chatlogs-84503.firebaseapp.com",
-    databaseURL: "https://chatlogs-84503.firebaseio.com",
-    projectId: "chatlogs-84503",
-    storageBucket: "chatlogs-84503.appspot.com",
-    messagingSenderId: "805207672985",
-    appId: "1:805207672985:web:7dbc9a8f6c5432b5661008",
-    measurementId: "G-2BGTLCPGZF"
-  };
+const firebaseConfig = firebaseSettings.firebaseConfig;
 firebase.initializeApp(firebaseConfig);
 const database = firebase.database();
 
