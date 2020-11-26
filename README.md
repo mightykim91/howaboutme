@@ -1,6 +1,9 @@
 # 나는 어때(How About Me)
 
-![Main Image](/Users/yeonsukim/Documents/howaboutme-gifs/readme_main.png)
+<div style="text-align: center;">
+  <img style="max-height:90%; max-width:90%;"
+  src="./readme_src/readme_main.png">
+ </div>
 
 **나는 어때**는 기존의 소개팅 애플리케이션들에서 가짜 프로필 사진이나 실물과 전혀 다른 프로필 사진으로 겪었던 불편함을 해소해줄 새로운 소개팅 애플리케이션입니다. 저희 서비스는 실제 사용자의 실물과 사용자가 업로드한 프로필 사진의 유사도를 측청하고 해당 유사도를 모든 사용자들에게 제공함으로써 앞서 말했던 불편함을 해소해주고 더욱 더 신뢰있는 소개팅 서비스를 제공하고 있습니다. 나는 어때와 함께 눈속임 없는 소개팅을 경험해보세요!
 
